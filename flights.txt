@@ -1,2 +1,4 @@
-EDI,BA,300,1000.0,2000.0
-GLA,RY,100,50.0,25.0
+Flight_No   Des Carrier capacity    bag weight
+BA978   EDI BA  300,    1000.0  2000.0
+RY776   RY  100  50.0 25000.0
+AA354   NY  AA  400 30000
