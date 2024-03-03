@@ -17,9 +17,8 @@
 9. Do check your pull request later whether it is merged or not or did I write a comment in it that needs to be fixed
 (Note: before making a commit do check your code editor's source control section to make sure no .class file is added)
 
-### Git commands for collaboration:
 
-How to run the code using the terminal:
+### How to run the code using the terminal:
 1. Make sure you are using the updated java JDK. The one I am using is:
    ```
    ╰─λ java --version
