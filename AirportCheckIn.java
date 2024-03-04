@@ -83,6 +83,7 @@ public class AirportCheckIn {
 	}
 	
 	public void displayCheckInKiosk() {
+		CheckInGUI cg = new CheckInGUI();
 	}
 	public void generateReport() {
 	}
