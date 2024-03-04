@@ -3,5 +3,6 @@ public class CW {
 		AirportCheckIn ac = new AirportCheckIn();
 		ac.loadBookingsFromFile();
 		ac.loadFlightsFromFile();
+		ac.displayCheckInKiosk();
 	}
 }
