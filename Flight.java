@@ -21,6 +21,8 @@ public class Flight {
     public String getCarrier(){
     	return carrier;
     }
+    
+    
     public int getCapacity(){
     	return capacity;
     }
