@@ -1,12 +1,16 @@
 public class CW {
-	public static void main(String[] args) {
-		AirportCheckIn ac = new AirportCheckIn();
-		ac.loadBookingsFromFile();
-		ac.loadFlightsFromFile();
-		ac.displayCheckInKiosk();
-		
-		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            ac.generateReport("report.txt");
-        }));
-	}
+    // Main method where program execution starts
+    public static void main(String[] args) {
+        // Creating an instance of AirportCheckIn class
+        AirportCheckIn ac = new AirportCheckIn();
+        
+        // Loading bookings from file
+        ac.loadBookingsFromFile();
+        
+        // Loading flights from file
+        ac.loadFlightsFromFile();
+        
+        // Displaying check-in kiosk GUI
+        ac.displayCheckInKiosk();
+    }
 }
