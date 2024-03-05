@@ -18,12 +18,16 @@ class CheckInGUI implements ActionListener {
     private JLabel bookingRefLabel;
     private JTextField lastNameTextField;
     private JTextField bookingRefTextField;
-    private JLabel baggageVolumeLabel;
     private JLabel baggageWeightLabel;
     private JLabel excessBaggageFeeLabel;
     private JLabel textWelcome;
     private JLabel baggageWelcome;
-    private JFormattedTextField baggageVolumeTextField;
+    private JLabel baggageLengthLabel;
+    private JFormattedTextField baggageLengthTextField;
+    private JLabel baggageWidthLabel;
+    private JFormattedTextField baggageWidthTextField;
+    private JLabel baggageHeightLabel;
+    private JFormattedTextField baggageHeightTextField;
     private JFormattedTextField baggageWeightTextField;
     private JFormattedTextField excessBaggageFeeTextField;
     private JButton confirmPersonalInfoButton;
@@ -35,6 +39,9 @@ class CheckInGUI implements ActionListener {
     // Declare variables for baggage info
     private double baggageWeight;
     private double baggageVolume;
+    private double baggageLength;
+    private double baggageWidth;
+    private double baggageHeight;
 
     public CheckInGUI(HashMap<String, Booking> bookings) {
         this.bookings = bookings;
@@ -129,17 +136,33 @@ class CheckInGUI implements ActionListener {
         GroupLayout baggageInfoLayout = new GroupLayout(baggageInfoPanel);
         baggageInfoPanel.setLayout(baggageInfoLayout);
 
-        baggageWelcome = new JLabel("Please enter you Baggage details");
+        baggageWelcome = new JLabel("Please enter your Baggage details");
         baggageWelcome.setFont(largerFont);
         baggageWelcome.setForeground(myTextColor);
 
-        baggageVolumeLabel = new JLabel("Baggage Volume: ");
-        baggageVolumeLabel.setFont(largerFont);
-        baggageVolumeLabel.setForeground(myTextColor);
+        baggageLengthLabel = new JLabel("Length (cm): ");
+        baggageLengthLabel.setFont(largerFont);
+        baggageLengthLabel.setForeground(myTextColor);
 
-        baggageVolumeTextField = new JFormattedTextField(new DecimalFormat("#0.00"));
-        baggageVolumeTextField.setPreferredSize(new Dimension(50, 35));
-        baggageVolumeTextField.setFont(largerFont);
+        baggageLengthTextField = new JFormattedTextField(new DecimalFormat("#0.00"));
+        baggageLengthTextField.setPreferredSize(new Dimension(50, 35));
+        baggageLengthTextField.setFont(largerFont);
+
+        baggageWidthLabel = new JLabel("Width (cm): ");
+        baggageWidthLabel.setFont(largerFont);
+        baggageWidthLabel.setForeground(myTextColor);
+
+        baggageWidthTextField = new JFormattedTextField(new DecimalFormat("#0.00"));
+        baggageWidthTextField.setPreferredSize(new Dimension(50, 35));
+        baggageWidthTextField.setFont(largerFont);
+
+        baggageHeightLabel = new JLabel("Height (cm): ");
+        baggageHeightLabel.setFont(largerFont);
+        baggageHeightLabel.setForeground(myTextColor);
+
+        baggageHeightTextField = new JFormattedTextField(new DecimalFormat("#0.00"));
+        baggageHeightTextField.setPreferredSize(new Dimension(50, 35));
+        baggageHeightTextField.setFont(largerFont);
 
         baggageWeightLabel = new JLabel("Baggage Weight: ");
         baggageWeightLabel.setFont(largerFont);
@@ -151,11 +174,20 @@ class CheckInGUI implements ActionListener {
 
         confirmBaggageInfoButton = new JButton("Confirm Baggage Info");
         confirmBaggageInfoButton.addActionListener(this);
+
+        // Add components to baggage info panel
+        baggageInfoPanel.add(baggageWelcome);
         baggageInfoPanel.add(baggageWeightLabel);
         baggageInfoPanel.add(baggageWeightTextField);
-        baggageInfoPanel.add(baggageVolumeLabel);
-        baggageInfoPanel.add(baggageVolumeTextField);
+        baggageInfoPanel.add(baggageLengthLabel);
+        baggageInfoPanel.add(baggageLengthTextField);
+        baggageInfoPanel.add(baggageWidthLabel);
+        baggageInfoPanel.add(baggageWidthTextField);
+        baggageInfoPanel.add(baggageHeightLabel);
+        baggageInfoPanel.add(baggageHeightTextField);
         baggageInfoPanel.add(confirmBaggageInfoButton);
+
+        // Set automatic creation of gaps
         baggageInfoLayout.setAutoCreateGaps(true);
         baggageInfoLayout.setAutoCreateContainerGaps(true);
 
@@ -164,11 +196,16 @@ class CheckInGUI implements ActionListener {
             .addGroup(baggageInfoLayout.createSequentialGroup()
                 .addComponent(baggageWelcome))
             .addGroup(baggageInfoLayout.createSequentialGroup()
-                .addComponent(baggageWeightLabel)
-                .addComponent(baggageWeightTextField))
-            .addGroup(baggageInfoLayout.createSequentialGroup()
-                .addComponent(baggageVolumeLabel)
-                .addComponent(baggageVolumeTextField))
+                .addGroup(baggageInfoLayout.createParallelGroup(Alignment.LEADING)
+                    .addComponent(baggageWeightLabel)
+                    .addComponent(baggageLengthLabel)
+                    .addComponent(baggageWidthLabel)
+                    .addComponent(baggageHeightLabel))
+                .addGroup(baggageInfoLayout.createParallelGroup(Alignment.LEADING)
+                    .addComponent(baggageWeightTextField)
+                    .addComponent(baggageLengthTextField)
+                    .addComponent(baggageWidthTextField)
+                    .addComponent(baggageHeightTextField)))
             .addComponent(confirmBaggageInfoButton, Alignment.TRAILING)
         );
 
@@ -181,8 +218,14 @@ class CheckInGUI implements ActionListener {
                 .addComponent(baggageWeightLabel)
                 .addComponent(baggageWeightTextField))
             .addGroup(baggageInfoLayout.createParallelGroup(Alignment.BASELINE)
-                .addComponent(baggageVolumeLabel)
-                .addComponent(baggageVolumeTextField))
+                .addComponent(baggageLengthLabel)
+                .addComponent(baggageLengthTextField))
+            .addGroup(baggageInfoLayout.createParallelGroup(Alignment.BASELINE)
+                .addComponent(baggageWidthLabel)
+                .addComponent(baggageWidthTextField))
+            .addGroup(baggageInfoLayout.createParallelGroup(Alignment.BASELINE)
+                .addComponent(baggageHeightLabel)
+                .addComponent(baggageHeightTextField))
             .addComponent(confirmBaggageInfoButton)
         );
 
@@ -235,39 +278,61 @@ class CheckInGUI implements ActionListener {
 
     // Action event handling
     public void actionPerformed(ActionEvent ae) {
+        // Check if the confirmPersonalInfoButton is clicked
         if (ae.getSource() == confirmPersonalInfoButton) {
-            // Perform validation for personal info and switch to baggage info panel
+            // Retrieve last name and booking reference entered by the user
             String lastName = lastNameTextField.getText();
             String bookingRef = bookingRefTextField.getText();
 
+            // Validate booking reference
             if (!bookings.containsKey(bookingRef)) {
+                // Display error message if booking reference is not found
                 JOptionPane.showMessageDialog(frame, "Booking reference not found. Please re-enter your details.");
                 return;
             }
 
+            // Retrieve booking details
             Booking booking = bookings.get(bookingRef);
 
+            // Validate last name against booking reference
             if (!booking.getPassengerName().equalsIgnoreCase(lastName)) {
+                // Display error message if last name does not match booking reference
                 JOptionPane.showMessageDialog(frame, "Last name does not match the booking reference. Please re-enter your details.");
                 return;
             }
 
+            // Check if passenger is already checked in
             if (booking.isCheckedIn()) {
+                // Display message if passenger is already checked in
                 JOptionPane.showMessageDialog(frame, "You are already checked in. Have a safe flight.");
                 return;
             }
 
+            // Set passenger as checked in
             booking.setCheckedIn(true);
             JOptionPane.showMessageDialog(frame, "Check-in successful!");
 
+            // Switch to baggage info panel
             CardLayout cardLayout = (CardLayout) mainPanel.getLayout();
             cardLayout.show(mainPanel, "baggage");
-        } else if (ae.getSource() == confirmBaggageInfoButton) {
-            // Perform validation for baggage info
-            String baggageVolumeString = baggageVolumeTextField.getText();
+        } 
+        // Check if the confirmBaggageInfoButton is clicked
+        else if (ae.getSource() == confirmBaggageInfoButton) {
+            // Retrieve baggage weight entered by the user
             String baggageWeightString = baggageWeightTextField.getText();
-            baggageVolume = Double.parseDouble(baggageVolumeString); // Store in class-level variable
             baggageWeight = Double.parseDouble(baggageWeightString); // Store in class-level variable
+
+            // Retrieve baggage dimensions entered by the user
+            String baggageLengthString = baggageLengthTextField.getText();
+            String baggageWidthString = baggageWidthTextField.getText();
+            String baggageHeightString = baggageHeightTextField.getText();
+            baggageLength = Double.parseDouble(baggageLengthString); // Store in class-level variable
+            baggageWidth = Double.parseDouble(baggageWidthString); // Store in class-level variable
+            baggageHeight = Double.parseDouble(baggageHeightString); // Store in class-level variable
+            
+            // Calculate baggage volume
+            // Volume = Length * Width * Height
+            baggageVolume = baggageLength * baggageWidth * baggageHeight;
 
             // Check if weight and volume are within limits
             if (baggageWeight <= 40.0 && baggageVolume <= 6000.0) {
@@ -275,7 +340,9 @@ class CheckInGUI implements ActionListener {
                 JOptionPane.showMessageDialog(frame, "Thank you for providing baggage information.");
                 lastNameTextField.setText("");
                 bookingRefTextField.setText("");
-                baggageVolumeTextField.setText("");
+                baggageLengthTextField.setText("");
+                baggageWidthTextField.setText("");
+                baggageHeightTextField.setText("");
                 baggageWeightTextField.setText("");
                 CardLayout cardLayout = (CardLayout) mainPanel.getLayout();
                 cardLayout.show(mainPanel, "personal");
@@ -315,7 +382,9 @@ class CheckInGUI implements ActionListener {
             // Go back to personal info panel
             lastNameTextField.setText("");
             bookingRefTextField.setText("");
-            baggageVolumeTextField.setText("");
+            baggageLengthTextField.setText("");
+            baggageWidthTextField.setText("");
+            baggageHeightTextField.setText("");
             baggageWeightTextField.setText("");
             CardLayout cardLayout = (CardLayout) mainPanel.getLayout();
             cardLayout.show(mainPanel, "personal");
