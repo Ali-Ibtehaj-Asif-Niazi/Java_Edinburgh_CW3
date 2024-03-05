@@ -1,4 +1,6 @@
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -13,6 +15,7 @@ public class AirportCheckIn {
 	public File flightsFile;
 	public HashMap<String, Booking> bookings;
 	public HashMap<String, Flight> flights;
+	private CheckInGUI checkInGUI;
 
 	public AirportCheckIn() {
 		bookings = new HashMap<>();
@@ -26,11 +29,16 @@ public class AirportCheckIn {
 			while ((line = br.readLine()) != null)
 			{  
 				String[] fileLine = line.split(",");
-				if (!isValidBookingReference(fileLine[0])) {
-                    System.out.println("Invalid booking reference: " + fileLine[0]);
-                    System.out.println("Please correct the file and load again.");
-                    return; 
-                }
+				try {
+					if(!isValidBookingReference(fileLine[0])) {
+						throw new IncorrectRefNumException(fileLine[0]);
+					}
+				} 
+				catch (IncorrectRefNumException e) {
+					System.out.println(e);
+					System.exit(1);
+				}
+
 				boolean checkedIn = fileLine[3].equals("true");
 				Booking newBooking = new Booking(fileLine[0],fileLine[1],fileLine[2],checkedIn);
 				bookings.put(fileLine[0], newBooking);
@@ -83,8 +91,55 @@ public class AirportCheckIn {
 	}
 	
 	public void displayCheckInKiosk() {
-		CheckInGUI cg = new CheckInGUI();
+		CheckInGUI cg = new CheckInGUI(bookings);
 	}
-	public void generateReport() {
-	}
+
+	public void generateReport(String filename) {
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
+			ArrayList<Passenger> passengers = checkInGUI.getPassengers();
+			for (HashMap.Entry<String, Flight> entry : flights.entrySet()) {
+				Flight flight = entry.getValue();
+
+				int checkedInPassengers = 0;
+				double totalBaggageWeight = 0.0;
+				double totalBaggageVolume = 0.0;
+				double totalExcessBaggageFees = 0.0;
+
+				for (Booking booking : bookings.values()) {
+					if (booking.getFlightCode().equals(flight.getFlightCode()) && booking.isCheckedIn()) {
+						checkedInPassengers++;
+					}
+					for (Passenger passenger : passengers) {
+						if (booking.getBookingRefCode().equals(passenger.getBookingRef()) && booking.getFlightCode().equals(flight.getFlightCode())) {
+							totalBaggageWeight += passenger.getBaggageWeight();
+							totalBaggageVolume += passenger.getBaggageVolume();
+							totalExcessBaggageFees += passenger.getExcessBaggageFee();
+            			}
+            		}
+				}
+
+
+
+				// Check if flight capacity is exceeded
+				boolean isCapacityExceeded = checkedInPassengers > flight.getCapacity();
+
+				writer.write("Flight: " + flight.getFlightCode());
+				writer.newLine();
+				writer.write("Checked-in Passengers: " + checkedInPassengers);
+				writer.newLine();
+				writer.write("Total Baggage Weight: " + totalBaggageWeight);
+				writer.newLine();
+				writer.write("Total Baggage Volume: " + totalBaggageVolume);
+				writer.newLine();
+				writer.write("Total Excess Baggage Fees: " + totalExcessBaggageFees);
+				writer.newLine();
+				writer.write("Flight Capacity Exceeded: " + isCapacityExceeded);
+				writer.newLine();
+				writer.write("--------------------------------------");
+				writer.newLine();
+			}
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

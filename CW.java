@@ -4,5 +4,9 @@ public class CW {
 		ac.loadBookingsFromFile();
 		ac.loadFlightsFromFile();
 		ac.displayCheckInKiosk();
+		
+		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            ac.generateReport("report.txt");
+        }));
 	}
 }

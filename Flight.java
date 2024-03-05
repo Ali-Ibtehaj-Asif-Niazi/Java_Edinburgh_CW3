@@ -7,7 +7,6 @@ public class Flight {
   int capacity;
   double maxBaggageWeight;
   double maxBaggageVolume;
-  List<Passenger> passengers;
     
   public Flight(String flightCode, String destinationAirport, String carrier, int capacity, double maxBaggageWeight, double maxBaggageVolume) {
     this.flightCode = flightCode;
@@ -40,13 +39,5 @@ public class Flight {
 
   public double getMaxBaggageVolume(){
     return maxBaggageVolume;
-  }
-
-  public List<Passenger> getPassengers(){
-    return passengers;
-  }
-  
-  public void addPassenger(Passenger passenger){
-    passengers.add(passenger);
   }
 }
