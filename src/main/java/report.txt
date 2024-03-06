@@ -8,9 +8,9 @@ Flight Weight Capacity Exceeded: false
 Flight Volume Capacity Exceeded: false
 --------------------------------------
 Flight: F11
-Checked-in Passengers: 0
-Total Baggage Weight: 0.0
-Total Baggage Volume: 0.0
+Checked-in Passengers: 1
+Total Baggage Weight: 2.0
+Total Baggage Volume: 60.0
 Total Excess Baggage Fees: 0.0
 Flight Passenger Capacity Exceeded: false
 Flight Weight Capacity Exceeded: false
