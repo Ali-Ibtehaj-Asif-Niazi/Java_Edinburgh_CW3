@@ -140,7 +140,7 @@ class CheckInGUI implements ActionListener {
         baggageWelcome.setFont(largerFont);
         baggageWelcome.setForeground(myTextColor);
 
-        baggageLengthLabel = new JLabel("Length (cm): ");
+        baggageLengthLabel = new JLabel("Length (Inch): ");
         baggageLengthLabel.setFont(largerFont);
         baggageLengthLabel.setForeground(myTextColor);
 
@@ -148,7 +148,7 @@ class CheckInGUI implements ActionListener {
         baggageLengthTextField.setPreferredSize(new Dimension(50, 35));
         baggageLengthTextField.setFont(largerFont);
 
-        baggageWidthLabel = new JLabel("Width (cm): ");
+        baggageWidthLabel = new JLabel("Width (Inch): ");
         baggageWidthLabel.setFont(largerFont);
         baggageWidthLabel.setForeground(myTextColor);
 
@@ -156,7 +156,7 @@ class CheckInGUI implements ActionListener {
         baggageWidthTextField.setPreferredSize(new Dimension(50, 35));
         baggageWidthTextField.setFont(largerFont);
 
-        baggageHeightLabel = new JLabel("Height (cm): ");
+        baggageHeightLabel = new JLabel("Height (Inch): ");
         baggageHeightLabel.setFont(largerFont);
         baggageHeightLabel.setForeground(myTextColor);
 
@@ -279,6 +279,7 @@ class CheckInGUI implements ActionListener {
     // Action event handling
     public void actionPerformed(ActionEvent ae) {
         // Check if the confirmPersonalInfoButton is clicked
+        boolean isBaggageInputValid = false;
         if (ae.getSource() == confirmPersonalInfoButton) {
             // Retrieve last name and booking reference entered by the user
             String lastName = lastNameTextField.getText();
@@ -318,60 +319,68 @@ class CheckInGUI implements ActionListener {
         } 
         // Check if the confirmBaggageInfoButton is clicked
         else if (ae.getSource() == confirmBaggageInfoButton) {
-            // Retrieve baggage weight entered by the user
-            String baggageWeightString = baggageWeightTextField.getText();
-            baggageWeight = Double.parseDouble(baggageWeightString); // Store in class-level variable
+            try {
+                // Retrieve baggage dimensions entered by the user
+                String baggageWeightString = baggageWeightTextField.getText();
+                String baggageLengthString = baggageLengthTextField.getText();
+                String baggageWidthString = baggageWidthTextField.getText();
+                String baggageHeightString = baggageHeightTextField.getText();
 
-            // Retrieve baggage dimensions entered by the user
-            String baggageLengthString = baggageLengthTextField.getText();
-            String baggageWidthString = baggageWidthTextField.getText();
-            String baggageHeightString = baggageHeightTextField.getText();
-            baggageLength = Double.parseDouble(baggageLengthString); // Store in class-level variable
-            baggageWidth = Double.parseDouble(baggageWidthString); // Store in class-level variable
-            baggageHeight = Double.parseDouble(baggageHeightString); // Store in class-level variable
-            
-            // Calculate baggage volume
-            // Volume = Length * Width * Height
-            baggageVolume = baggageLength * baggageWidth * baggageHeight;
+                // Parse baggage dimensions and store in class-level variables
+                baggageWeight = Double.parseDouble(baggageWeightString);
+                baggageLength = Double.parseDouble(baggageLengthString);
+                baggageWidth = Double.parseDouble(baggageWidthString);
+                baggageHeight = Double.parseDouble(baggageHeightString);
+                isBaggageInputValid = true;
+            } catch (NumberFormatException e) {
+                // Show a popup dialog to inform the user to enter a numerical value
+                JOptionPane.showMessageDialog(frame, "Please enter a numerical value for baggage dimensions.", "Input Error", JOptionPane.ERROR_MESSAGE);
+                isBaggageInputValid = false;
+            }
+            if (isBaggageInputValid) {
+                // Calculate baggage volume
+                // Volume = Length * Width * Height
+                baggageVolume = baggageLength * baggageWidth * baggageHeight;
 
-            // Check if weight and volume are within limits
-            if (baggageWeight <= 40.0 && baggageVolume <= 6000.0) {
-                passengers.add(new Passenger(lastNameTextField.getText(), bookingRefTextField.getText(), baggageWeight, baggageVolume, 0.0));
-                JOptionPane.showMessageDialog(frame, "Thank you for providing baggage information.");
-                lastNameTextField.setText("");
-                bookingRefTextField.setText("");
-                baggageLengthTextField.setText("");
-                baggageWidthTextField.setText("");
-                baggageHeightTextField.setText("");
-                baggageWeightTextField.setText("");
-                CardLayout cardLayout = (CardLayout) mainPanel.getLayout();
-                cardLayout.show(mainPanel, "personal");
-            } else {
-            // Determine excess baggage fee based on weight and volume limits
-            double excessBaggageFee = 0.0;
-            if (baggageWeight > 40.0 && baggageVolume > 6000.0) {
-                excessBaggageFee = 50.0; // If both weight and volume exceed the limits
-            } else if (baggageWeight > 40.0) {
-                excessBaggageFee = 20.0; // If only weight exceeds the limit
-            } else if (baggageVolume > 6000.0) {
-                excessBaggageFee = 30.0; // If only volume exceeds the limit
-            }
+                // Check if weight and volume are within limits
+                if (baggageWeight <= 40.0 && baggageVolume <= 6000.0) {
+                    passengers.add(new Passenger(lastNameTextField.getText(), bookingRefTextField.getText(), baggageWeight, baggageVolume, 0.0));
+                    JOptionPane.showMessageDialog(frame, "Thank you for providing baggage information.");
+                    lastNameTextField.setText("");
+                    bookingRefTextField.setText("");
+                    baggageLengthTextField.setText("");
+                    baggageWidthTextField.setText("");
+                    baggageHeightTextField.setText("");
+                    baggageWeightTextField.setText("");
+                    CardLayout cardLayout = (CardLayout) mainPanel.getLayout();
+                    cardLayout.show(mainPanel, "personal");
+                } else {
+                    // Determine excess baggage fee based on weight and volume limits
+                    double excessBaggageFee = 0.0;
+                    if (baggageWeight > 40.0 && baggageVolume > 6000.0) {
+                        excessBaggageFee = 50.0; // If both weight and volume exceed the limits
+                    } else if (baggageWeight > 40.0) {
+                        excessBaggageFee = 20.0; // If only weight exceeds the limit
+                    } else if (baggageVolume > 6000.0) {
+                        excessBaggageFee = 30.0; // If only volume exceeds the limit
+                    }
 
-            String message = "";
-            if (baggageWeight > 40.0 && baggageVolume > 6000.0) {
-                message = "Baggage weight exceeds the limit. You have to pay £20. \nBaggage volume exceeds the limit. You have to pay £30. \nYour total excess baggage fee is: £50";
+                    String message = "";
+                    if (baggageWeight > 40.0 && baggageVolume > 6000.0) {
+                        message = "Baggage weight exceeds the limit. You have to pay £20. \nBaggage volume exceeds the limit. You have to pay £30. \nYour total excess baggage fee is: £50";
+                    }
+                    else if (baggageWeight > 40.0) {
+                        message = "Baggage weight exceeds the limit. You have to pay £20. ";
+                    }
+                    else if (baggageVolume > 6000.0) {
+                        message = "Baggage volume exceeds the limit. You have to pay £30. ";
+                    }
+                    JOptionPane.showMessageDialog(frame, message.trim());
+                    excessBaggageFeeTextField.setText(String.valueOf(excessBaggageFee));
+                    CardLayout cardLayout = (CardLayout) mainPanel.getLayout();
+                    cardLayout.show(mainPanel, "excessBaggage");
+                }
             }
-            else if (baggageWeight > 40.0) {
-                message = "Baggage weight exceeds the limit. You have to pay £20. ";
-            }
-            else if (baggageVolume > 6000.0) {
-                message = "Baggage volume exceeds the limit. You have to pay £30. ";
-            }
-            JOptionPane.showMessageDialog(frame, message.trim());
-            excessBaggageFeeTextField.setText(String.valueOf(excessBaggageFee));
-            CardLayout cardLayout = (CardLayout) mainPanel.getLayout();
-            cardLayout.show(mainPanel, "excessBaggage");
-        }
         } else if (ae.getSource() == payExcessBaggageButton) {
             // Process payment for excess baggage fee
             String excessBaggageFeeString = excessBaggageFeeTextField.getText();

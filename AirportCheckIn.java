@@ -31,27 +31,26 @@ public class AirportCheckIn {
         String line = "";  
         try {
             BufferedReader br = new BufferedReader(new FileReader("bookings.txt"));  
-            while ((line = br.readLine()) != null)
-            {  
+            while ((line = br.readLine()) != null) {
                 // Splitting each line by comma to extract booking information
                 String[] fileLine = line.split(",");
                 try {
                     // Validating booking reference number format
-                    if(!isValidBookingReference(fileLine[0])) {
+                    if (!isValidBookingReference(fileLine[0])) {
                         throw new IncorrectRefNumException(fileLine[0]);
                     }
-                } 
-                catch (IncorrectRefNumException e) {
+                    // Creating new Booking object and storing it in HashMap
+                    boolean checkedIn = fileLine[3].equals("true");
+                    Booking newBooking = new Booking(fileLine[0], fileLine[1], fileLine[2], checkedIn);
+                    bookings.put(fileLine[0], newBooking);
+                } catch (IncorrectRefNumException e) {
                     // Handling incorrect reference number exception
                     System.out.println(e);
-                    System.exit(1);
+                    // Skip the rest of the code in this iteration
+                    continue;
                 }
-
-                // Creating new Booking object and storing it in HashMap
-                boolean checkedIn = fileLine[3].equals("true");
-                Booking newBooking = new Booking(fileLine[0],fileLine[1],fileLine[2],checkedIn);
-                bookings.put(fileLine[0], newBooking);
             }
+
             // Printing loaded booking information, used for debugguing commented out
 			// right now to avoid clutter in the terminal
             // for (HashMap.Entry<String, Booking> entry : bookings.entrySet()) {
@@ -63,6 +62,7 @@ public class AirportCheckIn {
             //                         ", Checked In: " + booking.isCheckedIn();
             //     System.out.println(bookingInfo);
             // }
+            // System.out.println("\n");
             br.close();
         }
         catch (IOException e) {
@@ -131,14 +131,15 @@ public class AirportCheckIn {
                 double totalBaggageWeight = 0.0;
                 double totalBaggageVolume = 0.0;
                 double totalExcessBaggageFees = 0.0;
+                String flightCode = flight.getFlightCode();
 
                 // Calculating total checked-in passengers and baggage statistics for the flight
                 for (Booking booking : bookings.values()) {
-                    if (booking.getFlightCode().equals(flight.getFlightCode()) && booking.isCheckedIn()) {
+                    if (booking.getFlightCode().equals(flightCode) && booking.isCheckedIn()) {
                         checkedInPassengers++;
                     }
                     for (Passenger passenger : passengers) {
-                        if (booking.getBookingRefCode().equals(passenger.getBookingRef()) && booking.getFlightCode().equals(flight.getFlightCode())) {
+                        if (booking.getBookingRefCode().equals(passenger.getBookingRef()) && booking.getFlightCode().equals(flightCode)) {
                             totalBaggageWeight += passenger.getBaggageWeight();
                             totalBaggageVolume += passenger.getBaggageVolume();
                             totalExcessBaggageFees += passenger.getExcessBaggageFee();
@@ -152,24 +153,26 @@ public class AirportCheckIn {
                 boolean isVolumeCapExceed = totalBaggageVolume > flight.getMaxBaggageVolume();
 
                 // Writing flight report to file
-                writer.write("Flight: " + flight.getFlightCode());
-                writer.newLine();
-                writer.write("Checked-in Passengers: " + checkedInPassengers);
-                writer.newLine();
-                writer.write("Total Baggage Weight: " + totalBaggageWeight);
-                writer.newLine();
-                writer.write("Total Baggage Volume: " + totalBaggageVolume);
-                writer.newLine();
-                writer.write("Total Excess Baggage Fees: " + totalExcessBaggageFees);
-                writer.newLine();
-                writer.write("Flight Passenger Capacity Exceeded: " + isPassengerCapExceed);
-                writer.newLine();
-                writer.write("Flight Weight Capacity Exceeded: " + isWeightCapExceed);
-                writer.newLine();
-                writer.write("Flight Volume Capacity Exceeded: " + isVolumeCapExceed);
-                writer.newLine();
-                writer.write("--------------------------------------");
-                writer.newLine();
+                if (flightCode != null) {
+                    writer.write("Flight: " + flightCode);
+                    writer.newLine();
+                    writer.write("Checked-in Passengers: " + checkedInPassengers);
+                    writer.newLine();
+                    writer.write("Total Baggage Weight: " + totalBaggageWeight);
+                    writer.newLine();
+                    writer.write("Total Baggage Volume: " + totalBaggageVolume);
+                    writer.newLine();
+                    writer.write("Total Excess Baggage Fees: " + totalExcessBaggageFees);
+                    writer.newLine();
+                    writer.write("Flight Passenger Capacity Exceeded: " + isPassengerCapExceed);
+                    writer.newLine();
+                    writer.write("Flight Weight Capacity Exceeded: " + isWeightCapExceed);
+                    writer.newLine();
+                    writer.write("Flight Volume Capacity Exceeded: " + isVolumeCapExceed);
+                    writer.newLine();
+                    writer.write("--------------------------------------");
+                    writer.newLine();
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
