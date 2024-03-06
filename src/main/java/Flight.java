@@ -14,24 +14,24 @@ public class Flight {
             if (!isValidFlightCode(flightCode)) {
                 throw new IllegalArgumentException("IllegalArgumentException: Invalid flight code: " + flightCode + " in the flights.txt file.\nThe correct format is capital F and 2 numbers e.g F12.\nThe data corresponding to the wrong Flight Code is removed.\nApplication started with the correct data only.\n");
             }
+            // Set instance variablesthis.flightCode = flightCode;
+            this.flightCode = flightCode;
+            this.destinationAirport = destinationAirport;
+            this.carrier = carrier;
+            this.capacity = capacity;
+            this.maxBaggageWeight = maxBaggageWeight;
+            this.maxBaggageVolume = maxBaggageVolume;
         } catch (IllegalArgumentException e) {
+            this.capacity = -1; //indicator for null state
+            this.maxBaggageWeight = -1.00; //indicator for null state
+            this.maxBaggageVolume = -1.00; //indicator for null state
             // Print error message
             System.out.println(e.getMessage());
-            // Exit constructor
-            return;
         }
-
-        // Set instance variablesthis.flightCode = flightCode;
-        this.flightCode = flightCode;
-        this.destinationAirport = destinationAirport;
-        this.carrier = carrier;
-        this.capacity = capacity;
-        this.maxBaggageWeight = maxBaggageWeight;
-        this.maxBaggageVolume = maxBaggageVolume;
     }
 
     // Method to validate flight code format
-    private boolean isValidFlightCode(String flightCode) {
+    protected boolean isValidFlightCode(String flightCode) {
         // Regular expression pattern for the flight code format
         String pattern = "^F\\d{2}$"; // F followed by two digits
 

@@ -1,0 +1,19 @@
+plugins {
+    id 'java'
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    // Use JUnit 4
+    testImplementation 'junit:junit:4.13.2'
+}
+
+// Configure test source directory
+sourceSets {
+    test {
+        java.srcDirs = ['src/test/java']
+    }
+}
