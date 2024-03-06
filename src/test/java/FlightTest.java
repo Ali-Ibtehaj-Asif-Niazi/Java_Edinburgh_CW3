@@ -1,3 +1,5 @@
+package src.test.java;
+import src.main.java.Flight;
 import org.junit.Test;
 import static org.junit.Assert.*;
 

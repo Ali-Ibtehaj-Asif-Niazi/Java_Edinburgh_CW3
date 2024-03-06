@@ -1,3 +1,4 @@
+package src.main.java;
 public class CW {
     // Main method where program execution starts
     public static void main(String[] args) {

@@ -1,3 +1,4 @@
+package src.main.java;
 public class Booking {
     // Instance variables to store booking details
     String bookingRefCode;

@@ -1,3 +1,4 @@
+package src.main.java;
 // Custom exception class for handling invalid booking reference numbers
 public class IncorrectRefNumException extends Exception {
     // Constructor to create an instance of IncorrectRefNumException with a custom error message

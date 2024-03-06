@@ -1,3 +1,4 @@
+package src.main.java;
 import javax.swing.*;
 import javax.swing.GroupLayout.*;
 import javax.swing.border.EmptyBorder;

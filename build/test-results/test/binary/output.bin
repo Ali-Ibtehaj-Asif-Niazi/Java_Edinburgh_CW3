@@ -1,0 +1,5 @@
+LIllegalArgumentException: Invalid flight code: XYZ in the flights.txt file.
+7The correct format is capital F and 2 numbers e.g F12.
+<The data corresponding to the wrong Flight Code is removed.
+0Application started with the correct data only.
+

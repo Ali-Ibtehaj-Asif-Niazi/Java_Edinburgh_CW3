@@ -1,3 +1,4 @@
+package src.main.java;
 public class Passenger {
     // Instance variables to store passenger details
     private String lastName;

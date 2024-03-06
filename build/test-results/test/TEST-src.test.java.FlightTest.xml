@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="src.test.java.FlightTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2024-03-06T18:22:51" hostname="Aryamans-MacBook-Air.local" time="0.011">
+  <properties/>
+  <testcase name="testGetDestinationAirport" classname="src.test.java.FlightTest" time="0.002"/>
+  <testcase name="testGetFlightCode" classname="src.test.java.FlightTest" time="0.0"/>
+  <testcase name="testConstructorInvalidFlightCode" classname="src.test.java.FlightTest" time="0.003"/>
+  <testcase name="testGetCarrier" classname="src.test.java.FlightTest" time="0.0"/>
+  <testcase name="testGetMaxBaggageVolume" classname="src.test.java.FlightTest" time="0.0"/>
+  <testcase name="testGetMaxBaggageWeight" classname="src.test.java.FlightTest" time="0.0"/>
+  <testcase name="testConstructorValidFlightCode" classname="src.test.java.FlightTest" time="0.0"/>
+  <testcase name="testGetCapacity" classname="src.test.java.FlightTest" time="0.0"/>
+  <system-out><![CDATA[IllegalArgumentException: Invalid flight code: XYZ in the flights.txt file.
+The correct format is capital F and 2 numbers e.g F12.
+The data corresponding to the wrong Flight Code is removed.
+Application started with the correct data only.
+
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

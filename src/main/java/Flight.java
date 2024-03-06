@@ -1,3 +1,4 @@
+package src.main.java;
 public class Flight {
     // Instance variables to store flight details
     String flightCode;
