@@ -34,3 +34,10 @@
    I might change the name of this main file from CW to something else but for now its fine.
 
 (Note: if you are using Eclipse thats fine but make sure that you dont add stuff to the code that's exclusive to Eclipse like package name in the start e.t.c.)
+
+### How to run JUnit Test with Gradle:
+1. Install gradle
+2. Open the terminal, go to the project directory and run ```gradle wrapper```
+3. Then run ```./gradlew test```
+
+Note: If you want to add a JUnit test, write it in this directory ```src/test/java```
