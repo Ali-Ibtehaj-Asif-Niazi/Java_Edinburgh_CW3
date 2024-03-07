@@ -1,5 +1,3 @@
-package src.test.java;
-import src.main.java.Booking;*;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
