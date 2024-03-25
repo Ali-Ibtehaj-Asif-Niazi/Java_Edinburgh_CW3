@@ -1,6 +1,6 @@
 # Advanced Software Engineering (F21AS)
 
-## Coursework 2024
+## Coursework 2024 - (Stage 1)
 
 ### Git commands for collaboration:
 1. Check in which branch you are ```git branch```
