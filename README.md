@@ -1,7 +1,7 @@
 # Advanced Software Engineering (F21AS)
 
--GUI Left
--Extended Features left
+### Kindly visit the branch: ```Stage-1``` for the source code of Stage 1<br/>
+### Kindly visit the branch: ```Stage-2``` for the source code of Stage 2<br/>
 
 ## Coursework 2024 - (Stage 2)
 
