@@ -4,14 +4,22 @@ public class Passenger {
     private String bookingRef;
     private double baggageWeight;
     private double baggageVolume;
+
+    private double baggageLength;
+    private double baggageWidth;
+    private double baggageHeight;
+
     private double excessBaggageFee;
 
     // Constructor to initialize Passenger object with provided details
-    public Passenger(String lastName, String bookingRef, double baggageWeight, double baggageVolume, double excessBaggageFee) {
+    public Passenger(String lastName, String bookingRef, double baggageWeight, double baggageHeight, double baggageWidth, double baggageLength, double baggageVolume, double excessBaggageFee) {
         this.lastName = lastName;
         this.bookingRef = bookingRef;
         this.baggageWeight = baggageWeight;
         this.baggageVolume = baggageVolume;
+        this.baggageLength = baggageLength;
+        this.baggageWidth = baggageWidth;
+        this.baggageHeight = baggageHeight;
         this.excessBaggageFee = excessBaggageFee;
     }
 
@@ -35,6 +43,18 @@ public class Passenger {
         return baggageVolume;
     }
 
+    public double getBaggageLength() {
+        return baggageLength;
+    }
+
+    public double getBaggageWidth() {
+        return baggageWidth;
+    }
+
+    public double getBaggageHeight() {
+        return baggageHeight;
+    }
+
     // Getter method to retrieve excess baggage fee
     public double getExcessBaggageFee() {
         return excessBaggageFee;
@@ -48,6 +68,18 @@ public class Passenger {
     // Setter method to update baggage volume
     public void setBaggageVolume(double volume) {
         this.baggageVolume = volume;
+    }
+
+    public void setBaggageLength(double length) {
+        this.baggageLength = length;
+    }
+
+    public void setBaggageWidth(double width) {
+        this.baggageWidth = width;
+    }
+
+    public void setBaggageHeight(double height) {
+        this.baggageHeight = height;
     }
 
     // Setter method to update excess baggage fee

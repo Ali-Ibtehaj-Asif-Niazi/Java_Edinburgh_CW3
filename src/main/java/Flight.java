@@ -8,35 +8,14 @@ public class Flight {
     double maxBaggageVolume;
 
     // Constructor to initialize Flight object with provided details
-    public Flight(String flightCode, String destinationAirport, String carrier, int capacity, double maxBaggageWeight, double maxBaggageVolume) throws IllegalArgumentException {
-        try {
-            // Validating flight code format
-            if (!isValidFlightCode(flightCode)) {
-                throw new IllegalArgumentException("IllegalArgumentException: Invalid flight code: " + flightCode + " in the flights.txt file.\nThe correct format is capital F and 2 numbers e.g F12.\nThe data corresponding to the wrong Flight Code is removed.\nApplication started with the correct data only.\n");
-            }
-            // Set instance variablesthis.flightCode = flightCode;
-            this.flightCode = flightCode;
-            this.destinationAirport = destinationAirport;
-            this.carrier = carrier;
-            this.capacity = capacity;
-            this.maxBaggageWeight = maxBaggageWeight;
-            this.maxBaggageVolume = maxBaggageVolume;
-        } catch (IllegalArgumentException e) {
-            this.capacity = -1; //indicator for null state
-            this.maxBaggageWeight = -1.00; //indicator for null state
-            this.maxBaggageVolume = -1.00; //indicator for null state
-            // Print error message
-            System.out.println(e.getMessage());
-        }
-    }
-
-    // Method to validate flight code format
-    protected boolean isValidFlightCode(String flightCode) {
-        // Regular expression pattern for the flight code format
-        String pattern = "^F\\d{2}$"; // F followed by two digits
-
-        // Check if the flight code matches the pattern
-        return flightCode.matches(pattern);
+    public Flight(String flightCode, String destinationAirport, String carrier, int capacity, double maxBaggageWeight, double maxBaggageVolume){
+        // Set instance variablesthis.flightCode = flightCode;
+        this.flightCode = flightCode;
+        this.destinationAirport = destinationAirport;
+        this.carrier = carrier;
+        this.capacity = capacity;
+        this.maxBaggageWeight = maxBaggageWeight;
+        this.maxBaggageVolume = maxBaggageVolume;
     }
 
     // Getter method to retrieve flight code
