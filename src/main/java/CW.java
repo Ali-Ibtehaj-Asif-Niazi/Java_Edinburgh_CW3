@@ -1,6 +1,12 @@
 public class CW {
     // Main method where program execution starts
     public static void main(String[] args) {
+    	
+    	AirportGUI gui = new AirportGUI();
+
+        // Set GUI visible
+        gui.setVisible(true);
+       
         // Creating an instance of AirportCheckIn class
         AirportSimulation simulation = new AirportSimulation();
         
@@ -14,9 +20,6 @@ public class CW {
         simulation.startSimulation();
 
         // Create an instance of AirportGUI
-        //AirportGUI gui = new AirportGUI();
-
-        // Set GUI visible
-        //gui.setVisible(true);
+        
     }
 }
