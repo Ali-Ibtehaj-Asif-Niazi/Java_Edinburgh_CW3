@@ -2,15 +2,21 @@ public class CW {
     // Main method where program execution starts
     public static void main(String[] args) {
         // Creating an instance of AirportCheckIn class
-        AirportCheckIn ac = new AirportCheckIn();
+        AirportSimulation simulation = new AirportSimulation();
         
         // Loading bookings from file
-        ac.loadBookingsFromFile();
+        simulation.loadBookingsFromFile();
         
         // Loading flights from file
-        ac.loadFlightsFromFile();
-        
-        // Displaying check-in kiosk GUI
-        ac.displayCheckInKiosk();
+        simulation.loadFlightsFromFile();
+
+        // Start the simulation
+        simulation.startSimulation();
+
+        // Create an instance of AirportGUI
+        //AirportGUI gui = new AirportGUI();
+
+        // Set GUI visible
+        //gui.setVisible(true);
     }
 }
