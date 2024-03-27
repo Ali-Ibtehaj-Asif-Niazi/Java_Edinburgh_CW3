@@ -202,7 +202,7 @@ public class AirportSimulation {
     // HashMaps to store bookings and flights data
     public HashMap<String, Booking> bookings;
     public HashMap<String, Flight> flights;
-
+    public AirportGUI airportGUI;
     private Lock consoleLock = new ReentrantLock();
     private static final long SIMULATION_DURATION_MS = TimeUnit.MINUTES.toMillis(1); // Simulation duration: 30 minutes
 
@@ -215,7 +215,7 @@ public class AirportSimulation {
     List<Thread> checkInThreads;
     List<CheckInDesk> desks; // Maintain references to CheckInDesk instances
 
-    public AirportSimulation() {
+    public AirportSimulation(AirportGUI airportGUI) {
         // Initialize Logger
         try {
             FileHandler fileHandler = new FileHandler(LOG_FILE_PATH);
@@ -230,6 +230,7 @@ public class AirportSimulation {
         passengerQueue = new ArrayBlockingQueue<>(100);
         checkInThreads = new ArrayList<>();
         desks = new ArrayList<>();
+        this.airportGUI = airportGUI;
     }
 
     // Custom log formatter to remove redundant parts
@@ -388,6 +389,11 @@ public class AirportSimulation {
             CheckInDesk desk = new CheckInDesk(i + 1);
             Thread thread = new Thread(desk);
             thread.start();
+            try {
+				Thread.sleep(300);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
             checkInThreads.add(thread);
             desks.add(desk); // Add desk reference to the list
         }
@@ -414,7 +420,11 @@ public class AirportSimulation {
             }
         }, SIMULATION_DURATION_MS);
     }
-
+    private void updateGUI() {
+   	    airportGUI.updateDesks(desks);
+	    airportGUI.updateFlights(flights);
+		airportGUI.updateQueue(passengerQueue);  	
+    }
     // Method to create Passenger from Booking data
     private Passenger createPassengerFromBooking(Booking booking) {
         // Check if the passenger is checked in
@@ -479,7 +489,9 @@ public class AirportSimulation {
             this.deskNumber = deskNumber;
             this.processing = true; // Start processing initially
         }
-
+        public int getDeskNumber() {
+        	return deskNumber;
+        }
         @Override
         public void run() {
             while (processing) {
@@ -493,11 +505,15 @@ public class AirportSimulation {
                     e.printStackTrace();
                 }
             }
+            currentPassenger = null;
         }
 
         // Method to process passenger
         private synchronized void processPassenger(Passenger passenger) {
             consoleLock.lock(); // Acquire lock
+            if (airportGUI != null) {
+            	updateGUI();
+            }
             try {
                 //Print passengers in the queue
                 System.out.println("Passengers in Queue:");
