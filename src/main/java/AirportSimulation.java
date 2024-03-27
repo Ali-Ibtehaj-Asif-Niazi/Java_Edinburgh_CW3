@@ -195,7 +195,7 @@ public class AirportSimulation {
     // HashMaps to store bookings and flights data
     public HashMap<String, Booking> bookings;
     public HashMap<String, Flight> flights;
-
+    public AirportGUI airportGUI;
     private Lock consoleLock = new ReentrantLock();
 
     BlockingQueue<Passenger> passengerQueue;
@@ -210,7 +210,15 @@ public class AirportSimulation {
         checkInThreads = new ArrayList<>();
         desks = new ArrayList<>();
     }
-
+    public AirportSimulation(AirportGUI airportGUI) {
+        // Initialize queues, flights, bookings, etc.
+        flights = new HashMap<>();
+        bookings = new HashMap<>();
+        passengerQueue = new ArrayBlockingQueue<>(100);
+        checkInThreads = new ArrayList<>();
+        desks = new ArrayList<>();
+        this.airportGUI = airportGUI;
+    }
     // Method to load bookings from a file
     public void loadBookingsFromFile() {
         String line = "";  
@@ -326,10 +334,15 @@ public class AirportSimulation {
         }
 
         // Create and start check-in threads
-        for (int i = 0; i < 2; i++) { // Assuming 2 check-in desks
+        for (int i = 0; i < 3; i++) { // Assuming 2 check-in desks
             CheckInDesk desk = new CheckInDesk(i + 1);
             Thread thread = new Thread(desk);
             thread.start();
+            try {
+				Thread.sleep(300);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
             checkInThreads.add(thread);
             desks.add(desk); // Add desk reference to the list
         }
@@ -343,7 +356,11 @@ public class AirportSimulation {
             }
         }
     }
-
+    private void updateGUI() {
+   	    airportGUI.updateDesks(desks);
+	    airportGUI.updateFlights(flights);
+		airportGUI.updateQueue(passengerQueue);  	
+    }
     // Method to create Passenger from Booking data
     private Passenger createPassengerFromBooking(Booking booking) {
         // Check if the passenger is checked in
@@ -406,24 +423,31 @@ public class AirportSimulation {
         public CheckInDesk(int deskNumber) {
             this.deskNumber = deskNumber;
         }
-
+        public int getDeskNumber() {
+        	return deskNumber;
+        }
         @Override
         public void run() {
             while (!passengerQueue.isEmpty()) {
                 try {
                     currentPassenger = passengerQueue.take();
                     processPassenger(currentPassenger);
+                    
                     //printSimulationState();
                     Thread.sleep(2000); // Simulate processing time
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
+            currentPassenger = null;
         }
 
         // Method to process passenger
         private void processPassenger(Passenger passenger) {
             consoleLock.lock(); // Acquire lock
+            if (airportGUI != null) {
+            	updateGUI();
+            }
             try {
                 //Print passengers in the queue
                 System.out.println("Passengers in Queue:");
@@ -433,6 +457,7 @@ public class AirportSimulation {
                 System.out.println();
                 System.out.println("Desk " + deskNumber + ":");
                 if (passenger != null) {
+                    
                     System.out.println("Last Name: " + passenger.getLastName());
                     System.out.println("Baggage Weight: " + passenger.getBaggageWeight());
                     System.out.println("Excess Baggage Fee: " + passenger.getExcessBaggageFee());

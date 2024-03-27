@@ -8,17 +8,16 @@ public class CW {
         gui.setVisible(true);
        
         // Creating an instance of AirportCheckIn class
-        AirportSimulation simulation = new AirportSimulation();
+        AirportSimulation simulation = new AirportSimulation(gui);
         
         // Loading bookings from file
         simulation.loadBookingsFromFile();
         
         // Loading flights from file
         simulation.loadFlightsFromFile();
-
+        
         // Start the simulation
         simulation.startSimulation();
-
         // Create an instance of AirportGUI
         
     }
