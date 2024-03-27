@@ -16,9 +16,6 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-
-import org.w3c.dom.css.RGBColor;
-
 import javax.swing.GroupLayout.Alignment;
 
 public class AirportGUI implements ActionListener {
@@ -43,7 +40,7 @@ public class AirportGUI implements ActionListener {
     	flightsPanel.setLayout(new BoxLayout(flightsPanel, 0));
     	passengerQueuePanel = new JPanel();
     	passengerQueueAmountLabel = new JLabel();
-    	scrollPaneList = new JList();
+    	scrollPaneList = new JList<String>();
     	
     	passengerQueueScrollPane = new JScrollPane();
     	passengerQueueScrollPane.setPreferredSize(new Dimension(450,110));
