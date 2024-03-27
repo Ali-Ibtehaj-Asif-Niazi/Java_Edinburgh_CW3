@@ -107,7 +107,6 @@ public class AirportGUI implements ActionListener {
 		for (AirportSimulation.CheckInDesk desk : desks) {
 			JPanel deskPanel = new JPanel();
 			JLabel deskLabel = new JLabel();
-			System.out.println("w");
 			deskPanel.setBorder(BorderFactory.createLineBorder(Color.black));
 			String displayText ="<html>Desk " + 
 			Integer.toString(desk.getDeskNumber()) + 

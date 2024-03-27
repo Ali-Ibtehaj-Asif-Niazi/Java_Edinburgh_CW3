@@ -215,22 +215,6 @@ public class AirportSimulation {
     List<Thread> checkInThreads;
     List<CheckInDesk> desks; // Maintain references to CheckInDesk instances
 
-    public AirportSimulation() {
-        // Initialize Logger
-        try {
-            FileHandler fileHandler = new FileHandler(LOG_FILE_PATH);
-            fileHandler.setFormatter(new CustomFormatter());
-            LOGGER.addHandler(fileHandler);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        // Initialize queues, flights, bookings, etc.
-        flights = new HashMap<>();
-        bookings = new HashMap<>();
-        passengerQueue = new ArrayBlockingQueue<>(100);
-        checkInThreads = new ArrayList<>();
-        desks = new ArrayList<>();
-    }
     public AirportSimulation(AirportGUI airportGUI) {
         // Initialize Logger
         try {
@@ -401,7 +385,7 @@ public class AirportSimulation {
         }
 
         // Create and start check-in threads
-        for (int i = 0; i < 3; i++) { // Assuming 2 check-in desks
+        for (int i = 0; i < 2; i++) { // Assuming 2 check-in desks
             CheckInDesk desk = new CheckInDesk(i + 1);
             Thread thread = new Thread(desk);
             thread.start();
@@ -514,7 +498,6 @@ public class AirportSimulation {
                 try {
                     currentPassenger = passengerQueue.take();
                     processPassenger(currentPassenger);
-                    
                     //printSimulationState();
                     Thread.sleep(5000); // Simulate processing time
                     //TimeUnit.SECONDS.sleep(5);
@@ -540,7 +523,6 @@ public class AirportSimulation {
                 System.out.println();
                 System.out.println("Desk " + deskNumber + ":");
                 if (passenger != null) {
-                    
                     System.out.println("Last Name: " + passenger.getLastName());
                     System.out.println("Baggage Weight: " + passenger.getBaggageWeight());
                     System.out.println("Excess Baggage Fee: " + passenger.getExcessBaggageFee());
