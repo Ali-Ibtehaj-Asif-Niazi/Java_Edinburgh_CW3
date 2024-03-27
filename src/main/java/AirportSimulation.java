@@ -14,6 +14,13 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.Random;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.TimeUnit;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.FileHandler;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 
 
@@ -197,18 +204,44 @@ public class AirportSimulation {
     public HashMap<String, Flight> flights;
 
     private Lock consoleLock = new ReentrantLock();
+    private static final long SIMULATION_DURATION_MS = TimeUnit.MINUTES.toMillis(1); // Simulation duration: 30 minutes
+
+    private static final Logger LOGGER = Logger.getLogger(AirportSimulation.class.getName());
+    private static final String LOG_FILE_PATH = "simulation.log";
+
+    private volatile boolean isAddingPassengers = true;
 
     BlockingQueue<Passenger> passengerQueue;
     List<Thread> checkInThreads;
     List<CheckInDesk> desks; // Maintain references to CheckInDesk instances
 
     public AirportSimulation() {
+        // Initialize Logger
+        try {
+            FileHandler fileHandler = new FileHandler(LOG_FILE_PATH);
+            fileHandler.setFormatter(new CustomFormatter());
+            LOGGER.addHandler(fileHandler);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         // Initialize queues, flights, bookings, etc.
         flights = new HashMap<>();
         bookings = new HashMap<>();
         passengerQueue = new ArrayBlockingQueue<>(100);
         checkInThreads = new ArrayList<>();
         desks = new ArrayList<>();
+    }
+
+    // Custom log formatter to remove redundant parts
+    static class CustomFormatter extends SimpleFormatter {
+        @Override
+        public synchronized String format(java.util.logging.LogRecord record) {
+            return String.format("%1$tb %1$td, %1$tY %1$tl:%1$tM:%1$tS %2$s%n%4$s%n",
+                    record.getMillis(),
+                    record.getMessage(),
+                    record.getLevel().getName(),
+                    record.getThrown() != null ? record.getThrown() : "");
+        }
     }
 
     // Method to load bookings from a file
@@ -311,18 +344,43 @@ public class AirportSimulation {
 
     // Method to start the simulation
     public void startSimulation() {
-        System.out.println("Simulation Started");
-
-       // Iterate over bookings and create passengers
-        for (Booking booking : bookings.values()) {
-            Passenger passenger = createPassengerFromBooking(booking);
-            if (passenger != null) {
-                try {
-                    passengerQueue.put(passenger);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+        LOGGER.info("Simulation Started");
+       
+       // Start a separate thread for adding passengers to the queue
+        Thread threadQueue = new Thread(() -> {
+            long startTime = System.currentTimeMillis();
+            while (System.currentTimeMillis() - startTime < SIMULATION_DURATION_MS) {
+            //     while(isAddingPassengers){
+                    for (Booking booking : bookings.values()) {
+                        if(isAddingPassengers){
+                            Passenger passenger = createPassengerFromBooking(booking);
+                            if (passenger != null) {
+                                try {
+                                    LOGGER.info("Passenger arrived at the airport, Last Name: "+passenger.getLastName());
+                                    passengerQueue.put(passenger);
+                                    Thread.sleep(2000); // Wait for 2 seconds before adding the next passenger
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        } else {
+                            try{Thread.sleep(2000);}
+                            catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                    }
+                    isAddingPassengers = false;
+            //     }
             }
+        });
+        threadQueue.start();
+
+        // Introduce a delay before starting the check-in threads
+        try {
+            Thread.sleep(2000); // Wait 5 seconds before starting check-in threads
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
 
         // Create and start check-in threads
@@ -335,13 +393,26 @@ public class AirportSimulation {
         }
  
         // Wait for all threads to finish
-        for (Thread thread : checkInThreads) {
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        // for (Thread thread : checkInThreads) {
+        //     try {
+        //         thread.join();
+        //     } catch (InterruptedException e) {
+        //         e.printStackTrace();
+        //     }
+        // }
+
+        // Schedule a task to stop the simulation after the specified duration
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                System.out.println("Simulation ended. Check-in desks are now closed.");
+                for (CheckInDesk desk : desks) {
+                    desk.stopProcessing(); // Stop the processing of passengers
+                }
+                timer.cancel(); // Cancel the timer
             }
-        }
+        }, SIMULATION_DURATION_MS);
     }
 
     // Method to create Passenger from Booking data
@@ -402,19 +473,22 @@ public class AirportSimulation {
     class CheckInDesk implements Runnable {
         private int deskNumber;
         private Passenger currentPassenger;
+        private volatile boolean processing; // Flag to control processing
 
         public CheckInDesk(int deskNumber) {
             this.deskNumber = deskNumber;
+            this.processing = true; // Start processing initially
         }
 
         @Override
         public void run() {
-            while (!passengerQueue.isEmpty()) {
+            while (processing) {
                 try {
                     currentPassenger = passengerQueue.take();
                     processPassenger(currentPassenger);
                     //printSimulationState();
-                    Thread.sleep(2000); // Simulate processing time
+                    Thread.sleep(5000); // Simulate processing time
+                    //TimeUnit.SECONDS.sleep(5);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -422,7 +496,7 @@ public class AirportSimulation {
         }
 
         // Method to process passenger
-        private void processPassenger(Passenger passenger) {
+        private synchronized void processPassenger(Passenger passenger) {
             consoleLock.lock(); // Acquire lock
             try {
                 //Print passengers in the queue
@@ -448,6 +522,11 @@ public class AirportSimulation {
         // Method to get the current passenger being processed
         public Passenger getCurrentPassenger() {
             return currentPassenger;
+        }
+
+        // Method to stop processing passengers
+        public void stopProcessing() {
+            this.processing = false;
         }
     }
 
