@@ -183,7 +183,7 @@ public class AirportGUI implements ActionListener {
     				" has a bag weighing " + 
     				Math.round(desk.getCurrentPassenger().getBaggageVolume()*100)/100.0 +
     				"kg" +
-    				"<br>A baggage fee of £" +
+    				"<br>A baggage fee of ï¿½" +
     				desk.getCurrentPassenger().getExcessBaggageFee() + 
     				" is due</html>";
     			}
@@ -230,14 +230,13 @@ public class AirportGUI implements ActionListener {
 		}
 	}
 	public void updateDesks(List<AirportSimulation.CheckInDesk> desks) {
-		
 		for (Map.Entry<AirportSimulation.CheckInDesk, DeskPanel> entry : deskPanelsMap.entrySet()) {
 			AirportSimulation.CheckInDesk desk = entry.getKey();
 			DeskPanel panel = entry.getValue();
 			panel.Update(desk);
 			if (desk.getCurrentPassenger() != null) {
 				feesCollected += desk.getCurrentPassenger().getExcessBaggageFee();
-				feeLabel.setText("Baggage fees so far: £" + Double.toString(feesCollected));
+				feeLabel.setText("Baggage fees so far: " + Double.toString(feesCollected));
 			}
 		}
 	}
