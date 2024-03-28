@@ -39,7 +39,8 @@ public class AirportSimulation {
     BlockingQueue<Passenger> passengerQueue;
     List<Thread> checkInThreads;
     List<CheckInDesk> desks; // Maintain references to CheckInDesk instances
-
+    private int processingTime;
+    
     public AirportSimulation(AirportGUI airportGUI) {
         // Initialize Logger
         try {
@@ -56,6 +57,7 @@ public class AirportSimulation {
         checkInThreads = new ArrayList<>();
         desks = new ArrayList<>();
         this.airportGUI = airportGUI;
+        processingTime = 5000;
     }
 
     // Custom log formatter to remove redundant parts
@@ -214,7 +216,7 @@ public class AirportSimulation {
             Thread thread = new Thread(desk);
             thread.start();
             try {
-				Thread.sleep(300);
+				Thread.sleep(Math.round(processingTime / 10));
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -251,6 +253,7 @@ public class AirportSimulation {
    	    airportGUI.updateDesks(desks);
 	    airportGUI.updateFlights(flights);
 		airportGUI.updateQueue(passengerQueue);  	
+		processingTime = airportGUI.getProcessingTime();
     }
     // Method to create Passenger from Booking data
     private Passenger createPassengerFromBooking(Booking booking) {
@@ -297,7 +300,7 @@ public class AirportSimulation {
                     try {
                         currentPassenger = passengerQueue.take();
                         processPassenger(currentPassenger);
-                        Thread.sleep(5000); // Simulate processing time
+                        Thread.sleep(processingTime); // Simulate processing time
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -305,7 +308,7 @@ public class AirportSimulation {
                     try {
                         currentPassenger = null;
                         processPassenger(currentPassenger);
-                        Thread.sleep(5000); // Simulate processing time
+                        Thread.sleep(processingTime); // Simulate processing time
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }

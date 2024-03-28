@@ -17,17 +17,26 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.JButton;
 
 public class AirportGUI implements ActionListener {
 	private JFrame frame;
     private JPanel mainPanel;
     private JPanel desksPanel;
     private JPanel flightsPanel;
+    private JPanel controlPanel;
+    private JButton increaseProcessingTimeButton;
+    private JButton decreaseProcessingTimeButton;
+    private JLabel processingTimeLabel;
+    private JLabel processingTimeLabelDisplay;
     private JPanel passengerQueuePanel;
     private JScrollPane passengerQueueScrollPane;
     private JLabel passengerQueueAmountLabel; 
     private JList<String> scrollPaneList;
+    private int processingTime;
     public AirportGUI(){
+    	processingTime = 5000;
+    	
     	frame = new JFrame("Airport GUI");
     	frame.setSize(700,700);
     	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -40,8 +49,15 @@ public class AirportGUI implements ActionListener {
     	flightsPanel.setLayout(new BoxLayout(flightsPanel, 0));
     	passengerQueuePanel = new JPanel();
     	passengerQueueAmountLabel = new JLabel();
-    	scrollPaneList = new JList<String>();
+    	controlPanel = new JPanel();
+    	increaseProcessingTimeButton = new JButton(">");
+    	processingTimeLabelDisplay = new JLabel(Integer.toString(processingTime));
+    	processingTimeLabel = new JLabel("Processing Time (ms): ");
+    	decreaseProcessingTimeButton = new JButton("<");
+    	decreaseProcessingTimeButton.addActionListener(this);
+    	increaseProcessingTimeButton.addActionListener(this);
     	
+    	scrollPaneList = new JList<String>();
     	passengerQueueScrollPane = new JScrollPane();
     	passengerQueueScrollPane.setPreferredSize(new Dimension(450,110));
     	
@@ -59,6 +75,8 @@ public class AirportGUI implements ActionListener {
         				.addComponent(desksPanel))
         		.addGroup(mainLayout.createParallelGroup()
         				.addComponent(flightsPanel))
+        		.addGroup(mainLayout.createParallelGroup()
+        				.addComponent(controlPanel))
         );
         mainLayout.setVerticalGroup(mainLayout.createSequentialGroup()
         		.addGroup(mainLayout.createSequentialGroup()
@@ -67,12 +85,19 @@ public class AirportGUI implements ActionListener {
         				.addComponent(desksPanel))
         		.addGroup(mainLayout.createSequentialGroup()
         				.addComponent(flightsPanel))
+        		.addGroup(mainLayout.createSequentialGroup()
+        				.addComponent(controlPanel))
         );
+        controlPanel.add(processingTimeLabel);
+        controlPanel.add(decreaseProcessingTimeButton);
+        controlPanel.add(processingTimeLabelDisplay);
+        controlPanel.add(increaseProcessingTimeButton);
         passengerQueuePanel.add(passengerQueueAmountLabel);
         passengerQueuePanel.add(passengerQueueScrollPane);
         mainPanel.add(passengerQueuePanel);
         mainPanel.add(desksPanel);
         mainPanel.add(flightsPanel);
+        mainPanel.add(controlPanel);
         frame.add(mainPanel);
     }
 	public void setVisible(boolean b) {
@@ -154,7 +179,22 @@ public class AirportGUI implements ActionListener {
 		}
 	}
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub		
+		if (e.getSource() == increaseProcessingTimeButton) {
+			processingTime += 100;
+		}
+		else if (e.getSource() == decreaseProcessingTimeButton) {
+			processingTime -= 100;
+		}
+		if (processingTime < 100) {
+			processingTime = 100;
+		}
+		else if (processingTime > 10000){
+			processingTime = 10000;
+		}
+		processingTimeLabelDisplay.setText(Integer.toString(processingTime));
+	}
+	public int getProcessingTime() {
+		return processingTime;
 	}
 
 }
