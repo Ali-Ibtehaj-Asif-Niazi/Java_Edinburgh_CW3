@@ -267,13 +267,15 @@ public class AirportSimulation {
             double baggageLength = random.nextDouble() * 100; // Random baggage length
             double baggageWidth = random.nextDouble() * 50; // Random baggage width
             double baggageHeight = random.nextDouble() * 30; // Random baggage height
-            double baggageVolume = baggageLength * baggageWidth * baggageHeight; // Random baggage height
+            double baggageVolume = baggageLength * baggageWidth * baggageHeight * 0.001; // Volume calculation (litres)
             double excessBaggageFee = 0.0;
-            if (baggageWeight > 40.0 && baggageVolume > 6000.0) {
+            double maxWeight = 40;
+            double maxVolume = 44; //Ryanair limits
+            if (baggageWeight > maxWeight && baggageVolume > maxVolume) { 
                 excessBaggageFee = 50.0; // If both weight and volume exceed the limits
-            } else if (baggageWeight > 40.0) {
+            } else if (baggageWeight > maxWeight) {
                 excessBaggageFee = 20.0; // If only weight exceeds the limit
-            } else if (baggageVolume > 6000.0) {
+            } else if (baggageVolume > maxVolume) { 
                 excessBaggageFee = 30.0; // If only volume exceeds the limit
             }
             // Create Passenger object with generated data
@@ -301,6 +303,7 @@ public class AirportSimulation {
                 if(!passengerQueue.isEmpty()) {
                     try {
                         currentPassenger = passengerQueue.take();
+                        getOnFlight(currentPassenger);
                         processPassenger(currentPassenger);
                         Thread.sleep(processingTime); // Simulate processing time
                     } catch (InterruptedException e) {
@@ -317,14 +320,20 @@ public class AirportSimulation {
                 }
             }
         }
-
+        private void getOnFlight(Passenger passenger) {
+        	String ref = passenger.getBookingRef();
+        	Booking booking = bookings.get(ref);
+        	Flight flight = flights.get(booking.getFlightCode());
+        	booking.setCheckedIn(true);
+        	flight.updateFlight(passenger.getBaggageWeight(), passenger.getBaggageVolume());
+        }
         // Method to process passenger
         private void processPassenger(Passenger passenger) {
             if (airportGUI != null) {
             	updateGUI();
             }
             if(passenger!=null)
-            {LOGGER.info("Passenger checking in, Last Name: "+passenger.getLastName());}
+            {LOGGER.info("Passenger checking in, Last Name: " + passenger.getLastName());}
         }
 
         // Method to get the current passenger being processed
