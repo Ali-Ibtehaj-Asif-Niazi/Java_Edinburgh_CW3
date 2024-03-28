@@ -1,23 +1,21 @@
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.HashMap;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ArrayBlockingQueue;
+import java.util.List;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 // Class representing the Airport simulation
 public class AirportSimulation {
@@ -42,7 +40,7 @@ public class AirportSimulation {
     private int processingTime;
     
     public AirportSimulation(AirportGUI airportGUI) {
-        // Initialize Logger
+        // Initialise Logger
         try {
             FileHandler fileHandler = new FileHandler(LOG_FILE_PATH);
             fileHandler.setFormatter(new CustomFormatter());
@@ -50,7 +48,7 @@ public class AirportSimulation {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        // Initialize queues, flights, bookings, etc.
+        // Initialise queues, flights, bookings, etc.
         flights = new HashMap<>();
         bookings = new HashMap<>();
         passengerQueue = new ArrayBlockingQueue<>(100);

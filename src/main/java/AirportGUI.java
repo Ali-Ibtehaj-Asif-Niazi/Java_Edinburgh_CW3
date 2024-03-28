@@ -34,6 +34,7 @@ public class AirportGUI implements ActionListener {
     private JLabel passengerQueueAmountLabel; 
     private JList<String> scrollPaneList;
     private JButton deskOpenButton;
+    private JLabel desksNumLabel;
     private int processingTime;
 	private int desksToOpen;
 	private JLabel desksDisplay;
@@ -60,6 +61,7 @@ public class AirportGUI implements ActionListener {
     	decreaseProcessingTimeButton = new JButton("<");
     	deskOpenButton = new JButton("Open another Desk");
     	desksDisplay = new JLabel();
+    	desksNumLabel = new JLabel();
     	decreaseProcessingTimeButton.addActionListener(this);
     	increaseProcessingTimeButton.addActionListener(this);
     	deskOpenButton.addActionListener(this);
@@ -80,6 +82,8 @@ public class AirportGUI implements ActionListener {
         		.addGroup(mainLayout.createParallelGroup()
         				.addComponent(passengerQueuePanel))
         		.addGroup(mainLayout.createParallelGroup()
+        				.addComponent(desksNumLabel))
+        		.addGroup(mainLayout.createParallelGroup()
         				.addComponent(desksPanel))
         		.addGroup(mainLayout.createParallelGroup()
         				.addComponent(flightsPanel))
@@ -89,6 +93,8 @@ public class AirportGUI implements ActionListener {
         mainLayout.setVerticalGroup(mainLayout.createSequentialGroup()
         		.addGroup(mainLayout.createSequentialGroup()
         				.addComponent(passengerQueuePanel))
+        		.addGroup(mainLayout.createSequentialGroup()
+        				.addComponent(desksNumLabel))
         		.addGroup(mainLayout.createSequentialGroup()
         				.addComponent(desksPanel))
         		.addGroup(mainLayout.createSequentialGroup()
@@ -104,6 +110,7 @@ public class AirportGUI implements ActionListener {
         controlPanel.add(desksDisplay);
         passengerQueuePanel.add(passengerQueueAmountLabel);
         passengerQueuePanel.add(passengerQueueScrollPane);
+        mainPanel.add(desksNumLabel);
         mainPanel.add(passengerQueuePanel);
         mainPanel.add(desksPanel);
         mainPanel.add(flightsPanel);
@@ -139,6 +146,7 @@ public class AirportGUI implements ActionListener {
 	}
 	public void updateDesks(List<AirportSimulation.CheckInDesk> desks) {
 		desksPanel.removeAll();
+		desksNumLabel.setText(Integer.toString(desks.size()) + " desks currently open");
 		for (AirportSimulation.CheckInDesk desk : desks) {
 			if(desk.getCurrentPassenger()==null){
 				JPanel deskPanel = new JPanel();
