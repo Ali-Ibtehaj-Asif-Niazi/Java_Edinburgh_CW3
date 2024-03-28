@@ -33,9 +33,13 @@ public class AirportGUI implements ActionListener {
     private JScrollPane passengerQueueScrollPane;
     private JLabel passengerQueueAmountLabel; 
     private JList<String> scrollPaneList;
+    private JButton deskOpenButton;
     private int processingTime;
+	private int desksToOpen;
+	private JLabel desksDisplay;
     public AirportGUI(){
     	processingTime = 5000;
+    	desksToOpen = 0;
     	
     	frame = new JFrame("Airport GUI");
     	frame.setSize(700,700);
@@ -54,8 +58,12 @@ public class AirportGUI implements ActionListener {
     	processingTimeLabelDisplay = new JLabel(Integer.toString(processingTime));
     	processingTimeLabel = new JLabel("Processing Time (ms): ");
     	decreaseProcessingTimeButton = new JButton("<");
+    	deskOpenButton = new JButton("Open another Desk");
+    	desksDisplay = new JLabel();
     	decreaseProcessingTimeButton.addActionListener(this);
     	increaseProcessingTimeButton.addActionListener(this);
+    	deskOpenButton.addActionListener(this);
+    	
     	
     	scrollPaneList = new JList<String>();
     	passengerQueueScrollPane = new JScrollPane();
@@ -92,6 +100,8 @@ public class AirportGUI implements ActionListener {
         controlPanel.add(decreaseProcessingTimeButton);
         controlPanel.add(processingTimeLabelDisplay);
         controlPanel.add(increaseProcessingTimeButton);
+        controlPanel.add(deskOpenButton);
+        controlPanel.add(desksDisplay);
         passengerQueuePanel.add(passengerQueueAmountLabel);
         passengerQueuePanel.add(passengerQueueScrollPane);
         mainPanel.add(passengerQueuePanel);
@@ -185,6 +195,10 @@ public class AirportGUI implements ActionListener {
 		else if (e.getSource() == decreaseProcessingTimeButton) {
 			processingTime -= 100;
 		}
+		else if (e.getSource() == deskOpenButton) {
+			desksToOpen +=1;
+			desksDisplay.setText("Opening " + Integer.toString(desksToOpen) + " Desks...");
+		}
 		if (processingTime < 100) {
 			processingTime = 100;
 		}
@@ -192,6 +206,12 @@ public class AirportGUI implements ActionListener {
 			processingTime = 10000;
 		}
 		processingTimeLabelDisplay.setText(Integer.toString(processingTime));
+	}
+	public int checkDesksToOpen() {
+		int t = desksToOpen;
+		desksToOpen = 0;
+		desksDisplay.setText("");
+		return t;
 	}
 	public int getProcessingTime() {
 		return processingTime;

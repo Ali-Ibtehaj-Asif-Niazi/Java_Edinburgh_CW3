@@ -211,18 +211,7 @@ public class AirportSimulation {
         }
 
         // Create and start check-in threads
-        for (int i = 0; i < 2; i++) { // Assuming 2 check-in desks
-            CheckInDesk desk = new CheckInDesk(i + 1);
-            Thread thread = new Thread(desk);
-            thread.start();
-            try {
-				Thread.sleep(Math.round(processingTime / 10));
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-            checkInThreads.add(thread);
-            desks.add(desk); // Add desk reference to the list
-        }
+        openDesks(2);
  
         //Schedule a task to stop the simulation after the specified duration
         Timer timer = new Timer();
@@ -243,7 +232,21 @@ public class AirportSimulation {
         //System.exit(0);
     }
 
-
+    void openDesks(int n) {
+    	int s  = desks.size();
+    	for (int i = s; i < n + s; i++) { // Assuming 2 check-in desks
+            CheckInDesk desk = new CheckInDesk(i + 1);
+        	Thread thread = new Thread(desk);
+        	thread.start();
+        	try {
+				Thread.sleep(300);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+        	checkInThreads.add(thread);
+        	desks.add(desk); // Add desk reference to the list
+    	}
+    }
     // Method to stop the thread processing
     public void stopQueueProcessing() {
         isAddingPassengers = false;
@@ -252,7 +255,8 @@ public class AirportSimulation {
     private void updateGUI() {
    	    airportGUI.updateDesks(desks);
 	    airportGUI.updateFlights(flights);
-		airportGUI.updateQueue(passengerQueue);  	
+		airportGUI.updateQueue(passengerQueue);  
+		openDesks(airportGUI.checkDesksToOpen());
 		processingTime = airportGUI.getProcessingTime();
     }
     // Method to create Passenger from Booking data
