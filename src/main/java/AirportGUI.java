@@ -180,14 +180,14 @@ public class AirportGUI implements ActionListener {
 				" has a bag weighing " + 
 				Math.round(desk.getCurrentPassenger().getBaggageVolume()*100)/100.0 +
 				"kg" +
-				"<br>A baggage fee of £" +
+				"<br>A baggage fee of " +
 				desk.getCurrentPassenger().getExcessBaggageFee() + 
 				" is due</html>";
 				deskLabel.setText(displayText);
 				deskPanel.add(deskLabel);
 				desksPanel.add(deskPanel);
 				feesCollected += desk.getCurrentPassenger().getExcessBaggageFee();
-				feeLabel.setText("Baggage fees so far: £" + Double.toString(feesCollected));
+				feeLabel.setText("Baggage fees so far: " + Double.toString(feesCollected));
 			}
 		}
 	}
