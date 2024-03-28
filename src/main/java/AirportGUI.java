@@ -35,6 +35,7 @@ public class AirportGUI implements ActionListener {
     private JLabel passengerQueueAmountLabel; 
     private JList<String> scrollPaneList;
     private JButton deskOpenButton;
+    private JButton deskCloseButton;
     private JLabel desksNumLabel;
     private JLabel desksDisplay;
     private JPanel infoReadoutPanel;
@@ -70,12 +71,14 @@ public class AirportGUI implements ActionListener {
     	processingTimeLabelDisplay = new JLabel(Integer.toString(processingTime));
     	processingTimeLabel = new JLabel("Processing Time (ms): ");
     	decreaseProcessingTimeButton = new JButton("<");
-    	deskOpenButton = new JButton("Open another Desk");
+    	deskOpenButton = new JButton("Open a Desk");
+    	deskCloseButton = new JButton("Close a Desk");
     	desksDisplay = new JLabel();
     	desksNumLabel = new JLabel();
     	decreaseProcessingTimeButton.addActionListener(this);
     	increaseProcessingTimeButton.addActionListener(this);
     	deskOpenButton.addActionListener(this);
+    	deskCloseButton.addActionListener(this);
     	
     	
     	scrollPaneList = new JList<String>();
@@ -122,6 +125,7 @@ public class AirportGUI implements ActionListener {
         controlPanel.add(processingTimeLabelDisplay);
         controlPanel.add(increaseProcessingTimeButton);
         controlPanel.add(deskOpenButton);
+        controlPanel.add(deskCloseButton);
         controlPanel.add(desksDisplay);
         infoReadoutPanel.add(feeLabel);
         passengerQueuePanel.add(passengerQueueAmountLabel);
@@ -170,8 +174,9 @@ public class AirportGUI implements ActionListener {
     	}
     	void Update(AirportSimulation.CheckInDesk desk) {
     		String displayText ="<html>No Passengers in Queue, Desk is idle</html>";
-    		if(desk.getCurrentPassenger() != null){
-    		displayText ="<html>Desk " + 
+    		if (desk != null) {
+    			if(desk.getCurrentPassenger() != null){
+    				displayText ="<html>Desk " + 
     				Integer.toString(desk.getDeskNumber()) + 
     				"<br>Passenger " + 
     				desk.getCurrentPassenger().getLastName() + 
@@ -181,6 +186,7 @@ public class AirportGUI implements ActionListener {
     				"<br>A baggage fee of £" +
     				desk.getCurrentPassenger().getExcessBaggageFee() + 
     				" is due</html>";
+    			}
     		}
     		deskLabel.setText(displayText);
     	}
@@ -215,14 +221,16 @@ public class AirportGUI implements ActionListener {
 	public void addDesks(List<AirportSimulation.CheckInDesk> desks) {
     	deskPanelsMap = new HashMap<AirportSimulation.CheckInDesk, DeskPanel>();
     	desksPanel.removeAll();
-		for (AirportSimulation.CheckInDesk desk : desks) {
+    	desksNumLabel.setText(Integer.toString(desks.size()) + " desks currently open");
+    	for (AirportSimulation.CheckInDesk desk : desks) {
 			DeskPanel newPanel = new DeskPanel();
 			deskPanelsMap.put(desk,newPanel);
+			newPanel.Update(desk);
 			desksPanel.add(newPanel);
 		}
 	}
 	public void updateDesks(List<AirportSimulation.CheckInDesk> desks) {
-		desksNumLabel.setText(Integer.toString(desks.size()) + " desks currently open");
+		
 		for (Map.Entry<AirportSimulation.CheckInDesk, DeskPanel> entry : deskPanelsMap.entrySet()) {
 			AirportSimulation.CheckInDesk desk = entry.getKey();
 			DeskPanel panel = entry.getValue();
@@ -240,6 +248,7 @@ public class AirportGUI implements ActionListener {
 			FlightPanel newPanel = new FlightPanel();
 			Flight flight = entry.getValue();
 			flightPanelsMap.put(flight, newPanel);
+			newPanel.Update(flight);
 			flightsPanel.add(newPanel);
 		}
 	}
@@ -259,13 +268,25 @@ public class AirportGUI implements ActionListener {
 		}
 		else if (e.getSource() == deskOpenButton) {
 			desksToOpen +=1;
-			desksDisplay.setText("Opening " + Integer.toString(desksToOpen) + " Desks...");
 		}
+		else if (e.getSource() == deskCloseButton) {
+			desksToOpen -=1;
+		}
+		
 		if (processingTime < 100) {
 			processingTime = 100;
 		}
 		else if (processingTime > 10000){
 			processingTime = 10000;
+		}
+		if (desksToOpen > 0) {
+			desksDisplay.setText("Opening " + Integer.toString(desksToOpen) + " Desks...");
+		}
+		else if (desksToOpen < 0) {
+			desksDisplay.setText("Closing " + Integer.toString(-desksToOpen) + " Desks...");
+		}
+		else {
+			desksDisplay.setText(null);
 		}
 		processingTimeLabelDisplay.setText(Integer.toString(processingTime));
 	}

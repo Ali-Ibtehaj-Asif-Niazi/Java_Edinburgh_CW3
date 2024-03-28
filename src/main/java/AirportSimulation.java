@@ -26,7 +26,7 @@ public class AirportSimulation {
     public HashMap<String, Booking> bookings;
     public HashMap<String, Flight> flights;
     public AirportGUI airportGUI;
-    private static final long SIMULATION_DURATION_MS = TimeUnit.MINUTES.toMillis(1); // Simulation duration: 30 minutes
+    private static final long SIMULATION_DURATION_MS = TimeUnit.MINUTES.toMillis(2); // Simulation duration: 30 minutes
 
     private static final Logger LOGGER = Logger.getLogger(AirportSimulation.class.getName());
     private static final String LOG_FILE_PATH = "simulation.log";
@@ -55,7 +55,6 @@ public class AirportSimulation {
         checkInThreads = new ArrayList<>();
         desks = new ArrayList<>();
         this.airportGUI = airportGUI;
-        processingTime = 5000;
     }
 
     // Custom log formatter to remove redundant parts
@@ -185,7 +184,7 @@ public class AirportSimulation {
                                     if (airportGUI != null) {
                                         updateGUI();
                                     }
-                                    Thread.sleep(2000); // Wait for 500 milliseconds before adding the next passenger
+                                    Thread.sleep(processingTime / 3); // Wait for prcessingTime / 3  milliseconds before adding the next passenger (/3 to build up a queue for demonstration)
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
                                 }
@@ -200,17 +199,9 @@ public class AirportSimulation {
         threadQueue.start();
 
         
-        // Introduce a delay before starting the check-in threads
-        try {
-            Thread.sleep(2000); // Wait few seconds before starting check-in threads
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
         // Create and start check-in threads
         openDesks(2);
         addGUI();
-        updateGUI();
         //Schedule a task to stop the simulation after the specified duration
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
@@ -228,7 +219,7 @@ public class AirportSimulation {
     }
 
     void openDesks(int n) {
-    	if (n != 0) {
+    	if (n > 0) {
     		int s  = desks.size();
     		for (int i = s; i < n + s; i++) { // Assuming 2 check-in desks
             	CheckInDesk desk = new CheckInDesk(i + 1);
@@ -242,6 +233,15 @@ public class AirportSimulation {
         		checkInThreads.add(thread);
         		desks.add(desk); // Add desk reference to the list
     		}
+    		
+    	}
+    	else if (n < 0) {
+    		for (int i = 0; i < -n; i++) {
+    			desks.get(i).stop();
+    			desks.remove(i);
+    		}
+    	}
+    	if (n != 0) {
     		addGUI();
     	}
     }
@@ -300,14 +300,19 @@ public class AirportSimulation {
         public int getDeskNumber() {
         	return deskNumber;
         }
+        public void stop() {
+        	processing = false;
+        }
         @Override
         public void run() {
             while (processing) {
                 if(!passengerQueue.isEmpty()) {
                     try {
+                    	
                         currentPassenger = passengerQueue.take();
-                        getOnFlight(currentPassenger);
+                        getOnFlight(currentPassenger);           
                         processPassenger(currentPassenger);
+                        
                         Thread.sleep(processingTime); // Simulate processing time
                     } catch (InterruptedException e) {
                         e.printStackTrace();
@@ -321,6 +326,9 @@ public class AirportSimulation {
                         e.printStackTrace();
                     }
                 }
+                if (airportGUI != null) {
+                	updateGUI();
+                }
             }
         }
         private void getOnFlight(Passenger passenger) {
@@ -332,9 +340,6 @@ public class AirportSimulation {
         }
         // Method to process passenger
         private void processPassenger(Passenger passenger) {
-            if (airportGUI != null) {
-            	updateGUI();
-            }
             if(passenger!=null)
             {LOGGER.info("Passenger checking in, Last Name: " + passenger.getLastName());}
         }
