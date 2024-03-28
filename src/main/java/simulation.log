@@ -1,32 +1,62 @@
-Mar 27, 2024 5:06:43 Simulation Started
+Mar 28, 2024 7:38:29 Simulation Started
 
-Mar 27, 2024 5:06:43 Passenger arrived at the airport, Last Name: Adam
+Mar 28, 2024 7:38:29 Passenger joined the queue, Last Name: Adam
 
-Mar 27, 2024 5:06:45 Passenger arrived at the airport, Last Name: Loki
+Mar 28, 2024 7:38:31 Passenger checking in, Last Name: Adam
 
-Mar 27, 2024 5:06:47 Passenger arrived at the airport, Last Name: Khan
+Mar 28, 2024 7:38:31 Passenger joined the queue, Last Name: Loki
 
-Mar 27, 2024 5:06:49 Passenger arrived at the airport, Last Name: Smith
+Mar 28, 2024 7:38:31 Passenger checking in, Last Name: Loki
 
-Mar 27, 2024 5:06:51 Passenger arrived at the airport, Last Name: Blade
+Mar 28, 2024 7:38:33 Passenger joined the queue, Last Name: Khan
 
-Mar 27, 2024 5:06:53 Passenger arrived at the airport, Last Name: Thor
+Mar 28, 2024 7:38:35 Passenger joined the queue, Last Name: Smith
 
-Mar 27, 2024 5:06:55 Passenger arrived at the airport, Last Name: Watt
+Mar 28, 2024 7:38:36 Passenger checking in, Last Name: Khan
 
-Mar 27, 2024 5:06:57 Passenger arrived at the airport, Last Name: Jacob
+Mar 28, 2024 7:38:36 Passenger checking in, Last Name: Smith
 
-Mar 27, 2024 5:06:59 Passenger arrived at the airport, Last Name: Zeus
+Mar 28, 2024 7:38:37 Passenger joined the queue, Last Name: Blade
 
-Mar 27, 2024 5:07:01 Passenger arrived at the airport, Last Name: Helios
+Mar 28, 2024 7:38:40 Passenger joined the queue, Last Name: Thor
 
-Mar 27, 2024 5:07:03 Passenger arrived at the airport, Last Name: Axe
+Mar 28, 2024 7:38:41 Passenger checking in, Last Name: Blade
 
-Mar 27, 2024 5:07:05 Passenger arrived at the airport, Last Name: Oden
+Mar 28, 2024 7:38:42 Passenger checking in, Last Name: Thor
 
-Mar 27, 2024 5:07:07 Passenger arrived at the airport, Last Name: Heimdall
+Mar 28, 2024 7:38:42 Passenger joined the queue, Last Name: Watt
 
-Mar 27, 2024 5:07:09 Passenger arrived at the airport, Last Name: Kratos
+Mar 28, 2024 7:38:44 Passenger joined the queue, Last Name: Jacob
 
-Mar 27, 2024 5:07:11 Passenger arrived at the airport, Last Name: Philip
+Mar 28, 2024 7:38:46 Passenger joined the queue, Last Name: Zeus
+
+Mar 28, 2024 7:38:46 Passenger checking in, Last Name: Watt
+
+Mar 28, 2024 7:38:47 Passenger checking in, Last Name: Jacob
+
+Mar 28, 2024 7:38:48 Passenger joined the queue, Last Name: Helios
+
+Mar 28, 2024 7:38:50 Passenger joined the queue, Last Name: Axe
+
+Mar 28, 2024 7:38:51 Passenger checking in, Last Name: Zeus
+
+Mar 28, 2024 7:38:52 Passenger checking in, Last Name: Helios
+
+Mar 28, 2024 7:38:52 Passenger joined the queue, Last Name: Oden
+
+Mar 28, 2024 7:38:54 Passenger joined the queue, Last Name: Heimdall
+
+Mar 28, 2024 7:38:56 Passenger joined the queue, Last Name: Kratos
+
+Mar 28, 2024 7:38:56 Passenger checking in, Last Name: Axe
+
+Mar 28, 2024 7:38:57 Passenger checking in, Last Name: Oden
+
+Mar 28, 2024 7:38:58 Passenger joined the queue, Last Name: Philip
+
+Mar 28, 2024 7:39:01 Passenger checking in, Last Name: Heimdall
+
+Mar 28, 2024 7:39:02 Passenger checking in, Last Name: Kratos
+
+Mar 28, 2024 7:39:06 Passenger checking in, Last Name: Philip
 
