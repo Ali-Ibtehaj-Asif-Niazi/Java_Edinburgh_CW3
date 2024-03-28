@@ -12,187 +12,12 @@ import java.util.regex.Matcher;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.Random;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.TimeUnit;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
-
-
-
-// public class AirportCheckIn {
-//     // File objects to hold booking and flight data
-//     public File bookingsFile;
-//     public File flightsFile;
-//     // HashMaps to store bookings and flights data
-//     public HashMap<String, Booking> bookings;
-//     public HashMap<String, Flight> flights;
-//     // GUI object for check-in interface
-//     private CheckInGUI checkInGUI;
-
-//     // Constructor initializes HashMaps for bookings and flights
-//     public AirportCheckIn() {
-//         bookings = new HashMap<>();
-//         flights = new HashMap<>();
-//     }
-
-//     // Method to load bookings from a file
-//     public void loadBookingsFromFile() {
-//         String line = "";  
-//         try {
-//             BufferedReader br = new BufferedReader(new FileReader("bookings.txt"));  
-//             while ((line = br.readLine()) != null) {
-//                 // Splitting each line by comma to extract booking information
-//                 String[] fileLine = line.split(",");
-//                 try {
-//                     // Validating booking reference number format
-//                     if (!isValidBookingReference(fileLine[0])) {
-//                         throw new IncorrectRefNumException(fileLine[0]);
-//                     }
-//                     // Creating new Booking object and storing it in HashMap
-//                     boolean checkedIn = fileLine[3].equals("true");
-//                     Booking newBooking = new Booking(fileLine[0], fileLine[1], fileLine[2], checkedIn);
-//                     bookings.put(fileLine[0], newBooking);
-//                 } catch (IncorrectRefNumException e) {
-//                     // Handling incorrect reference number exception
-//                     System.out.println(e);
-//                     // Skip the rest of the code in this iteration
-//                     continue;
-//                 }
-//             }
-
-//             // Printing loaded booking information, used for debugguing commented out
-// 			// right now to avoid clutter in the terminal
-//             // for (HashMap.Entry<String, Booking> entry : bookings.entrySet()) {
-//             //     String key = entry.getKey();
-//             //     Booking booking = entry.getValue();
-//             //     String bookingInfo = "Booking ID: " + key +
-//             //                         ", Passenger Name: " + booking.getPassengerName() +
-//             //                         ", Flight Code: " + booking.getFlightCode() +
-//             //                         ", Checked In: " + booking.isCheckedIn();
-//             //     System.out.println(bookingInfo);
-//             // }
-//             // System.out.println("\n");
-//             br.close();
-//         }
-//         catch (IOException e) {
-//             e.printStackTrace();
-//         }
-//     }
-
-//     // Method to validate booking reference number format
-//     private boolean isValidBookingReference(String bookingRef) {
-//         Pattern pattern = Pattern.compile("^[A-Z]{3}\\d{3}$");
-//         Matcher matcher = pattern.matcher(bookingRef);
-//         return matcher.matches();
-//     }
-    
-//     // Method to load flights from a file
-//     public void loadFlightsFromFile() {
-//         String line = "";  
-//         try {
-//             BufferedReader br = new BufferedReader(new FileReader("flights.txt"));  
-//             while ((line = br.readLine()) != null)
-//             {  
-//                 // Splitting each line by comma to extract flight information
-//                 String[] fileLine = line.split(",");
-//                 // Creating new Flight object and storing it in HashMap
-//                 Flight newFlight = new Flight(fileLine[0],fileLine[1],fileLine[2],Integer.parseInt(fileLine[3]),Double.parseDouble(fileLine[4]),Double.parseDouble(fileLine[5]));
-//                 flights.put(fileLine[0], newFlight);
-//             }
-//             // Printing loaded flight information, used for debugguing and commented out
-// 			// right now to avoid clutter in the terminal
-//             // for (HashMap.Entry<String, Flight> entry : flights.entrySet()) {
-//             //     String key = entry.getKey();
-//             //     Flight flight = entry.getValue();
-//             //     String flightInfo = "FLight ID: " + key +
-//             //                         ", Des: " + flight.getDestinationAirport() +
-//             //                         ", carrie: " + flight.getCarrier() +
-//             //                         ", Capacity: " + flight.getCapacity();
-//             //     System.out.println(flightInfo);
-//             // }
-//             br.close();
-//         }
-//         catch (IOException e) {
-//             e.printStackTrace();
-//         }
-//     }
-    
-//     // Method to display check-in kiosk GUI
-//     public void displayCheckInKiosk() {
-//         // Creating CheckInGUI object and setting it up
-//         CheckInGUI cg = new CheckInGUI(bookings);
-//         // Adding a shutdown hook to generate a report before closing
-//         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-//             generateReport("report.txt", cg);
-//         }));
-//     }
-
-//     // Method to generate a report based on check-in data
-//     public void generateReport(String filename, CheckInGUI checkInGUI) {
-//         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
-//             // Getting list of passengers from GUI
-//             ArrayList<Passenger> passengers = checkInGUI.getPassengers();
-//             // Iterating through flights to generate report for each flight
-//             for (HashMap.Entry<String, Flight> entry : flights.entrySet()) {
-//                 Flight flight = entry.getValue();
-
-//                 int checkedInPassengers = 0;
-//                 double totalBaggageWeight = 0.0;
-//                 double totalBaggageVolume = 0.0;
-//                 double totalExcessBaggageFees = 0.0;
-//                 String flightCode = flight.getFlightCode();
-
-//                 // Calculating total checked-in passengers and baggage statistics for the flight
-//                 for (Booking booking : bookings.values()) {
-//                     if (booking.getFlightCode().equals(flightCode) && booking.isCheckedIn()) {
-//                         checkedInPassengers++;
-//                     }
-//                     for (Passenger passenger : passengers) {
-//                         if (booking.getBookingRefCode().equals(passenger.getBookingRef()) && booking.getFlightCode().equals(flightCode)) {
-//                             totalBaggageWeight += passenger.getBaggageWeight();
-//                             totalBaggageVolume += passenger.getBaggageVolume();
-//                             totalExcessBaggageFees += passenger.getExcessBaggageFee();
-//                         }
-//                     }
-//                 }
-
-//                 // Checking if flight capacity is exceeded
-//                 boolean isPassengerCapExceed = checkedInPassengers > flight.getCapacity();
-//                 boolean isWeightCapExceed = totalBaggageWeight > flight.getMaxBaggageWeight();
-//                 boolean isVolumeCapExceed = totalBaggageVolume > flight.getMaxBaggageVolume();
-
-//                 // Writing flight report to file
-//                 if (flightCode != null) {
-//                     writer.write("Flight: " + flightCode);
-//                     writer.newLine();
-//                     writer.write("Checked-in Passengers: " + checkedInPassengers);
-//                     writer.newLine();
-//                     writer.write("Total Baggage Weight: " + totalBaggageWeight);
-//                     writer.newLine();
-//                     writer.write("Total Baggage Volume: " + totalBaggageVolume);
-//                     writer.newLine();
-//                     writer.write("Total Excess Baggage Fees: " + totalExcessBaggageFees);
-//                     writer.newLine();
-//                     writer.write("Flight Passenger Capacity Exceeded: " + isPassengerCapExceed);
-//                     writer.newLine();
-//                     writer.write("Flight Weight Capacity Exceeded: " + isWeightCapExceed);
-//                     writer.newLine();
-//                     writer.write("Flight Volume Capacity Exceeded: " + isVolumeCapExceed);
-//                     writer.newLine();
-//                     writer.write("--------------------------------------");
-//                     writer.newLine();
-//                 }
-//             }
-//         } catch (IOException e) {
-//             e.printStackTrace();
-//         }
-//     }
-// }
 
 // Class representing the Airport simulation
 public class AirportSimulation {
@@ -203,13 +28,13 @@ public class AirportSimulation {
     public HashMap<String, Booking> bookings;
     public HashMap<String, Flight> flights;
     public AirportGUI airportGUI;
-    private Lock consoleLock = new ReentrantLock();
     private static final long SIMULATION_DURATION_MS = TimeUnit.MINUTES.toMillis(1); // Simulation duration: 30 minutes
 
     private static final Logger LOGGER = Logger.getLogger(AirportSimulation.class.getName());
     private static final String LOG_FILE_PATH = "simulation.log";
 
     private volatile boolean isAddingPassengers = true;
+    private volatile boolean forOnce = true;
 
     BlockingQueue<Passenger> passengerQueue;
     List<Thread> checkInThreads;
@@ -347,39 +172,38 @@ public class AirportSimulation {
     public void startSimulation() {
         LOGGER.info("Simulation Started");
        
-       // Start a separate thread for adding passengers to the queue
-        Thread threadQueue = new Thread(() -> {
-            long startTime = System.currentTimeMillis();
-            while (System.currentTimeMillis() - startTime < SIMULATION_DURATION_MS) {
-            //     while(isAddingPassengers){
-                    for (Booking booking : bookings.values()) {
-                        if(isAddingPassengers){
+        Thread threadQueue = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while(isAddingPassengers) {
+                    if(forOnce){
+                        for (Booking booking : bookings.values()) {
                             Passenger passenger = createPassengerFromBooking(booking);
                             if (passenger != null) {
                                 try {
-                                    LOGGER.info("Passenger arrived at the airport, Last Name: "+passenger.getLastName());
+                                    LOGGER.info("Passenger joined the queue, Last Name: " + passenger.getLastName());
                                     passengerQueue.put(passenger);
-                                    Thread.sleep(2000); // Wait for 2 seconds before adding the next passenger
+                                    if (airportGUI != null) {
+                                        updateGUI();
+                                    }
+                                    Thread.sleep(2000); // Wait for 500 milliseconds before adding the next passenger
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
                                 }
                             }
-                        } else {
-                            try{Thread.sleep(2000);}
-                            catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-                            }
+                        }
+                        forOnce = false;
                     }
-                    isAddingPassengers = false;
-            //     }
+                    else{}
+                }
             }
         });
         threadQueue.start();
 
+        
         // Introduce a delay before starting the check-in threads
         try {
-            Thread.sleep(2000); // Wait 5 seconds before starting check-in threads
+            Thread.sleep(2000); // Wait few seconds before starting check-in threads
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -398,28 +222,31 @@ public class AirportSimulation {
             desks.add(desk); // Add desk reference to the list
         }
  
-        // Wait for all threads to finish
-        // for (Thread thread : checkInThreads) {
-        //     try {
-        //         thread.join();
-        //     } catch (InterruptedException e) {
-        //         e.printStackTrace();
-        //     }
-        // }
-
-        // Schedule a task to stop the simulation after the specified duration
+        //Schedule a task to stop the simulation after the specified duration
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
                 System.out.println("Simulation ended. Check-in desks are now closed.");
-                for (CheckInDesk desk : desks) {
-                    desk.stopProcessing(); // Stop the processing of passengers
+                stopQueueProcessing();
+                for (CheckInDesk desk_running : desks) {
+                    desk_running.stopProcessing();
                 }
-                timer.cancel(); // Cancel the timer
+                if (airportGUI != null) {
+            	updateGUI();
+            }
+                timer.cancel();
             }
         }, SIMULATION_DURATION_MS);
+        //System.exit(0);
     }
+
+
+    // Method to stop the thread processing
+    public void stopQueueProcessing() {
+        isAddingPassengers = false;
+    }
+
     private void updateGUI() {
    	    airportGUI.updateDesks(desks);
 	    airportGUI.updateFlights(flights);
@@ -450,35 +277,6 @@ public class AirportSimulation {
         return null; // Passenger is already checked in
     }
 
-    // Method to print the current simulation state
-    // private void printSimulationState() {
-    //     consoleLock.lock(); // Acquire lock
-    //     try {
-    //         // Print passengers in the queue
-    //         System.out.println("Passengers in Queue:");
-    //         for (Passenger passenger : passengerQueue) {
-    //             System.out.println(passenger.getLastName());
-    //         }
-    //         System.out.println();
-
-    //         // Print details of each check-in desk
-    //         // for (CheckInDesk desk : desks) {
-    //         //     System.out.println("Desk " + desk.deskNumber + ":");
-    //         //     if (desk.currentPassenger != null) {
-    //         //         System.out.println("Last Name: " + desk.currentPassenger.getLastName());
-    //         //         System.out.println("Baggage Weight: " + desk.currentPassenger.getBaggageWeight());
-    //         //         System.out.println("Excess Baggage Fee: " + desk.currentPassenger.getExcessBaggageFee());
-    //         //     } else {
-    //         //         System.out.println("No passenger being processed");
-    //         //     }
-    //         //     System.out.println();
-    //         // }
-    //     }finally {
-    //         consoleLock.unlock(); // Release lock
-    //     }
-    // }
-
-
     // Inner class representing a Check-in Desk as a Runnable
     class CheckInDesk implements Runnable {
         private int deskNumber;
@@ -495,44 +293,33 @@ public class AirportSimulation {
         @Override
         public void run() {
             while (processing) {
-                try {
-                    currentPassenger = passengerQueue.take();
-                    processPassenger(currentPassenger);
-                    //printSimulationState();
-                    Thread.sleep(5000); // Simulate processing time
-                    //TimeUnit.SECONDS.sleep(5);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                if(!passengerQueue.isEmpty()) {
+                    try {
+                        currentPassenger = passengerQueue.take();
+                        processPassenger(currentPassenger);
+                        Thread.sleep(5000); // Simulate processing time
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    try {
+                        currentPassenger = null;
+                        processPassenger(currentPassenger);
+                        Thread.sleep(5000); // Simulate processing time
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
-            currentPassenger = null;
         }
 
         // Method to process passenger
-        private synchronized void processPassenger(Passenger passenger) {
-            consoleLock.lock(); // Acquire lock
+        private void processPassenger(Passenger passenger) {
             if (airportGUI != null) {
             	updateGUI();
             }
-            try {
-                //Print passengers in the queue
-                System.out.println("Passengers in Queue:");
-                for (Passenger passengerz : passengerQueue) {
-                    System.out.println(passengerz.getLastName());
-                }
-                System.out.println();
-                System.out.println("Desk " + deskNumber + ":");
-                if (passenger != null) {
-                    System.out.println("Last Name: " + passenger.getLastName());
-                    System.out.println("Baggage Weight: " + passenger.getBaggageWeight());
-                    System.out.println("Excess Baggage Fee: " + passenger.getExcessBaggageFee());
-                } else {
-                    System.out.println("No passenger being processed");
-                }
-                System.out.println();
-            } finally {
-                consoleLock.unlock(); // Release lock
-            }
+            if(passenger!=null)
+            {LOGGER.info("Passenger checking in, Last Name: "+passenger.getLastName());}
         }
 
         // Method to get the current passenger being processed

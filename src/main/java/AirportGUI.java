@@ -105,21 +105,32 @@ public class AirportGUI implements ActionListener {
 	public void updateDesks(List<AirportSimulation.CheckInDesk> desks) {
 		desksPanel.removeAll();
 		for (AirportSimulation.CheckInDesk desk : desks) {
-			JPanel deskPanel = new JPanel();
-			JLabel deskLabel = new JLabel();
-			deskPanel.setBorder(BorderFactory.createLineBorder(Color.black));
-			String displayText ="<html>Desk " + 
-			Integer.toString(desk.getDeskNumber()) + 
-			"<br>Passenger " + 
-			desk.getCurrentPassenger().getLastName() + 
-			" has a bag of " + 
-			Math.round(desk.getCurrentPassenger().getBaggageWeight()*100)/100.0 +
-			"<br>A baggage fee of " +
-			desk.getCurrentPassenger().getExcessBaggageFee() + 
-			" is due</html>";
-			deskLabel.setText(displayText);
-			deskPanel.add(deskLabel);
-			desksPanel.add(deskPanel);
+			if(desk.getCurrentPassenger()==null){
+				JPanel deskPanel = new JPanel();
+				JLabel deskLabel = new JLabel();
+				deskPanel.setBorder(BorderFactory.createLineBorder(Color.black));
+				String displayText ="<html>No Passengers in Queue, All Desks are idle</html>";
+				deskLabel.setText(displayText);
+				deskPanel.add(deskLabel);
+				desksPanel.add(deskPanel);
+			}
+			else{
+				JPanel deskPanel = new JPanel();
+				JLabel deskLabel = new JLabel();
+				deskPanel.setBorder(BorderFactory.createLineBorder(Color.black));
+				String displayText ="<html>Desk " + 
+				Integer.toString(desk.getDeskNumber()) + 
+				"<br>Passenger " + 
+				desk.getCurrentPassenger().getLastName() + 
+				" has a bag of " + 
+				Math.round(desk.getCurrentPassenger().getBaggageWeight()*100)/100.0 +
+				"<br>A baggage fee of " +
+				desk.getCurrentPassenger().getExcessBaggageFee() + 
+				" is due</html>";
+				deskLabel.setText(displayText);
+				deskPanel.add(deskLabel);
+				desksPanel.add(deskPanel);
+			}
 		}
 	}
 	public void updateFlights(HashMap<String, Flight> flights) {
