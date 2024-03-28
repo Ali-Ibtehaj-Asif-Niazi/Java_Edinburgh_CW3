@@ -171,7 +171,6 @@ public class AirportSimulation {
     // Method to start the simulation
     public void startSimulation() {
         LOGGER.info("Simulation Started");
-       
         Thread threadQueue = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -210,7 +209,8 @@ public class AirportSimulation {
 
         // Create and start check-in threads
         openDesks(2);
- 
+        addGUI();
+        updateGUI();
         //Schedule a task to stop the simulation after the specified duration
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
@@ -221,9 +221,6 @@ public class AirportSimulation {
                 for (CheckInDesk desk_running : desks) {
                     desk_running.stopProcessing();
                 }
-                if (airportGUI != null) {
-            	updateGUI();
-            }
                 timer.cancel();
             }
         }, SIMULATION_DURATION_MS);
@@ -231,25 +228,31 @@ public class AirportSimulation {
     }
 
     void openDesks(int n) {
-    	int s  = desks.size();
-    	for (int i = s; i < n + s; i++) { // Assuming 2 check-in desks
-            CheckInDesk desk = new CheckInDesk(i + 1);
-        	Thread thread = new Thread(desk);
-        	thread.start();
-        	try {
-				Thread.sleep(300);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-        	checkInThreads.add(thread);
-        	desks.add(desk); // Add desk reference to the list
+    	if (n != 0) {
+    		int s  = desks.size();
+    		for (int i = s; i < n + s; i++) { // Assuming 2 check-in desks
+            	CheckInDesk desk = new CheckInDesk(i + 1);
+        		Thread thread = new Thread(desk);
+        		thread.start();
+        		try {
+					Thread.sleep(300);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+        		checkInThreads.add(thread);
+        		desks.add(desk); // Add desk reference to the list
+    		}
+    		addGUI();
     	}
     }
     // Method to stop the thread processing
     public void stopQueueProcessing() {
         isAddingPassengers = false;
     }
-
+    private void addGUI() {
+    	airportGUI.addFlights(flights);
+    	airportGUI.addDesks(desks);
+    }
     private void updateGUI() {
    	    airportGUI.updateDesks(desks);
 	    airportGUI.updateFlights(flights);
