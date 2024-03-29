@@ -6,9 +6,10 @@ public class Flight {
     int capacity;
     double maxBaggageWeight;
     double maxBaggageVolume;
+    String departureTime;
 
     // Constructor to initialize Flight object with provided details
-    public Flight(String flightCode, String destinationAirport, String carrier, int capacity, double maxBaggageWeight, double maxBaggageVolume){
+    public Flight(String flightCode, String destinationAirport, String carrier, int capacity, double maxBaggageWeight, double maxBaggageVolume, String departureTime){
         // Set instance variablesthis.flightCode = flightCode;
         this.flightCode = flightCode;
         this.destinationAirport = destinationAirport;
@@ -16,6 +17,7 @@ public class Flight {
         this.capacity = capacity;
         this.maxBaggageWeight = maxBaggageWeight;
         this.maxBaggageVolume = maxBaggageVolume;
+        this.departureTime = departureTime;
     }
 
     // Getter method to retrieve flight code
@@ -46,5 +48,9 @@ public class Flight {
     // Getter method to retrieve maximum baggage volume allowed
     public double getMaxBaggageVolume() {
         return maxBaggageVolume;
+    }
+
+    public String getDepartureTime() {
+        return departureTime;
     }
 }

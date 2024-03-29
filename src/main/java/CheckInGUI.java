@@ -6,7 +6,6 @@ import java.awt.event.*;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.ArrayList;
-import java.awt.Color;
 
 class CheckInGUI implements ActionListener {
     private JFrame frame;
@@ -295,6 +294,15 @@ class CheckInGUI implements ActionListener {
             // Retrieve booking details
             Booking booking = bookings.get(bookingRef);
 
+            String departureTime = booking.getFlightCode().getDepartureTime();
+
+            // Check if the departure time has passed
+            if (isDepartureTimePassed(departureTime)) {
+                JOptionPane.showMessageDialog(frame, "Check-in for this flight has closed.");
+                return;
+            }
+            
+
             // Validate last name against booking reference
             if (!booking.getPassengerName().equalsIgnoreCase(lastName)) {
                 // Display error message if last name does not match booking reference
@@ -344,7 +352,7 @@ class CheckInGUI implements ActionListener {
 
                 // Check if weight and volume are within limits
                 if (baggageWeight <= 40.0 && baggageVolume <= 6000.0) {
-                    passengers.add(new Passenger(lastNameTextField.getText(), bookingRefTextField.getText(), baggageWeight, baggageVolume, 0.0));
+                    passengers.add(new Passenger(lastNameTextField.getText(), bookingRefTextField.getText(), baggageWeight, baggageVolume, 0.0, baggageHeight, baggageHeight, baggageHeight));
                     JOptionPane.showMessageDialog(frame, "Thank you for providing baggage information.");
                     lastNameTextField.setText("");
                     bookingRefTextField.setText("");
@@ -385,7 +393,7 @@ class CheckInGUI implements ActionListener {
             // Process payment for excess baggage fee
             String excessBaggageFeeString = excessBaggageFeeTextField.getText();
             double excessBaggageFee = Double.parseDouble(excessBaggageFeeString);
-            passengers.add(new Passenger(lastNameTextField.getText(), bookingRefTextField.getText(), baggageWeight, baggageVolume, excessBaggageFee));
+            passengers.add(new Passenger(lastNameTextField.getText(), bookingRefTextField.getText(), baggageWeight, baggageVolume, excessBaggageFee, excessBaggageFee, excessBaggageFee, excessBaggageFee));
             JOptionPane.showMessageDialog(frame, "Thank you for paying the excess baggage fee.");
 
             // Go back to personal info panel
@@ -403,6 +411,19 @@ class CheckInGUI implements ActionListener {
     // Method to get passengers
     public ArrayList<Passenger> getPassengers() {
         return passengers;
+    }
+
+    private boolean isDepartureTimePassed(String departureTime) 
+    {
+    
+        String currentTime = getCurrentTime(); // Get current time
+        return currentTime.compareTo(departureTime) >= 0;
+    }
+
+    
+    private String getCurrentTime() {
+        
+        return "9:00";
     }
 }
 

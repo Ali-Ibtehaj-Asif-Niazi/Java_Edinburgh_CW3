@@ -18,6 +18,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
+import java.time.LocalDateTime;
+import java.util.Iterator;
+
 
 public class AirportGUI implements ActionListener {
 	private JFrame frame;
@@ -171,8 +174,11 @@ public class AirportGUI implements ActionListener {
 			flight.getValue().getDestinationAirport() +
 			"<br>" +
 			" checked in out of " +
+			"Departure Time: " + flight.getValue().getDepartureTime() +
+            "<br>" +
 			flight.getValue().getCapacity() +
 			"</html>";
+		
 			flightLabel.setText(displayText);
 			flightPanel.add(flightLabel);
 			flightsPanel.add(flightPanel);
