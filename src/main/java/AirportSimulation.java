@@ -8,9 +8,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.TimeUnit;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
@@ -26,47 +25,26 @@ public class AirportSimulation {
     public HashMap<String, Booking> bookings;
     public HashMap<String, Flight> flights;
     public AirportGUI airportGUI;
-    private static final long SIMULATION_DURATION_MS = TimeUnit.MINUTES.toMillis(2); // Simulation duration: 30 minutes
+    private static final long SIMULATION_DURATION_MS = 2 * 60 * 1000; // Simulation duration: 2 minutes
 
-    private static final Logger LOGGER = Logger.getLogger(AirportSimulation.class.getName());
-    private static final String LOG_FILE_PATH = "simulation.log";
+    private static final AirportLogger LOGGER = AirportLogger.getInstance();
 
     private volatile boolean isAddingPassengers = true;
     private volatile boolean forOnce = true;
 
-    BlockingQueue<Passenger> passengerQueue;
+    Queue<Passenger> passengerQueue;
     List<Thread> checkInThreads;
     List<CheckInDesk> desks; // Maintain references to CheckInDesk instances
     private int processingTime;
     
     public AirportSimulation(AirportGUI airportGUI) {
-        // Initialise Logger
-        try {
-            FileHandler fileHandler = new FileHandler(LOG_FILE_PATH);
-            fileHandler.setFormatter(new CustomFormatter());
-            LOGGER.addHandler(fileHandler);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         // Initialise queues, flights, bookings, etc.
         flights = new HashMap<>();
         bookings = new HashMap<>();
-        passengerQueue = new ArrayBlockingQueue<>(100);
+        passengerQueue = new LinkedList<>();
         checkInThreads = new ArrayList<>();
         desks = new ArrayList<>();
         this.airportGUI = airportGUI;
-    }
-
-    // Custom log formatter to remove redundant parts
-    static class CustomFormatter extends SimpleFormatter {
-        @Override
-        public synchronized String format(java.util.logging.LogRecord record) {
-            return String.format("%1$tb %1$td, %1$tY %1$tl:%1$tM:%1$tS %2$s%n%4$s%n",
-                    record.getMillis(),
-                    record.getMessage(),
-                    record.getLevel().getName(),
-                    record.getThrown() != null ? record.getThrown() : "");
-        }
     }
 
     // Method to load bookings from a file
@@ -93,17 +71,7 @@ public class AirportSimulation {
                     continue;
                 }
             }
-
-            for (HashMap.Entry<String, Booking> entry : bookings.entrySet()) {
-                String key = entry.getKey();
-                Booking booking = entry.getValue();
-                String bookingInfo = "Booking ID: " + key +
-                                    ", Passenger Name: " + booking.getPassengerName() +
-                                    ", Flight Code: " + booking.getFlightCode() +
-                                    ", Checked In: " + booking.isCheckedIn();
-                System.out.println(bookingInfo);
-            }
-            System.out.println("\n");
+            System.out.println("\n Bookings Loaded from File\n");
             br.close();
         }
         catch (IOException e) {
@@ -141,16 +109,7 @@ public class AirportSimulation {
                     continue;
                 }
             }
-
-            for (HashMap.Entry<String, Flight> entry : flights.entrySet()) {
-                String key = entry.getKey();
-                Flight flight = entry.getValue();
-                String flightInfo = "FLight ID: " + key +
-                                    ", Des: " + flight.getDestinationAirport() +
-                                    ", carrie: " + flight.getCarrier() +
-                                    ", Capacity: " + flight.getCapacity();
-                System.out.println(flightInfo);
-            }
+            System.out.println(" Flights Loaded from File\n");
             br.close();
         }
         catch (IOException e) {
@@ -166,10 +125,9 @@ public class AirportSimulation {
     }
 
 
-
     // Method to start the simulation
     public void startSimulation() {
-        LOGGER.info("Simulation Started");
+        LOGGER.log("Simulation Started");
         Thread threadQueue = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -179,8 +137,8 @@ public class AirportSimulation {
                             Passenger passenger = createPassengerFromBooking(booking);
                             if (passenger != null) {
                                 try {
-                                    LOGGER.info("Passenger joined the queue, Last Name: " + passenger.getLastName());
-                                    passengerQueue.put(passenger);
+                                    LOGGER.log("Passenger joined the queue, Last Name: " + passenger.getLastName());
+                                    passengerQueue.offer(passenger);
                                     if (airportGUI != null) {
                                         updateGUI();
                                     }
@@ -202,15 +160,17 @@ public class AirportSimulation {
         // Create and start check-in threads
         openDesks(2);
         addGUI();
+
         //Schedule a task to stop the simulation after the specified duration
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                System.out.println("Simulation ended. Check-in desks are now closed.");
+                LOGGER.log("All Check-in desks are now closed. Happy Flight!");
                 stopQueueProcessing();
                 for (CheckInDesk desk_running : desks) {
                     desk_running.stopProcessing();
+                    updateGUI();
                 }
                 timer.cancel();
             }
@@ -245,14 +205,17 @@ public class AirportSimulation {
     		addGUI();
     	}
     }
+
     // Method to stop the thread processing
     public void stopQueueProcessing() {
         isAddingPassengers = false;
     }
+
     private void addGUI() {
     	airportGUI.addFlights(flights);
     	airportGUI.addDesks(desks);
     }
+
     private void updateGUI() {
    	    airportGUI.updateDesks(desks);
 	    airportGUI.updateFlights(flights);
@@ -260,6 +223,7 @@ public class AirportSimulation {
 		openDesks(airportGUI.checkDesksToOpen());
 		processingTime = airportGUI.getProcessingTime();
     }
+
     // Method to create Passenger from Booking data
     private Passenger createPassengerFromBooking(Booking booking) {
         // Check if the passenger is checked in
@@ -267,13 +231,13 @@ public class AirportSimulation {
             // Generate random baggage weight and dimensions
             Random random = new Random();
             double baggageWeight = random.nextDouble() * 30 + 1; // Random baggage weight
-            double baggageLength = random.nextDouble() * 100; // Random baggage length
-            double baggageWidth = random.nextDouble() * 50; // Random baggage width
-            double baggageHeight = random.nextDouble() * 30; // Random baggage height
-            double baggageVolume = baggageLength * baggageWidth * baggageHeight * 0.001; // Volume calculation (litres)
+            double baggageLength = random.nextDouble() * 20; // Random baggage length in inches
+            double baggageWidth = random.nextDouble() * 10; // Random baggage width in inches
+            double baggageHeight = random.nextDouble() * 35; // Random baggage height in inches
+            double baggageVolume = baggageLength * baggageWidth * baggageHeight * 0.0163871; // Volume calculation (litres) (inch*inch*inch*0.0163871 = litres)
             double excessBaggageFee = 0.0;
             double maxWeight = 40;
-            double maxVolume = 44; //Ryanair limits
+            double maxVolume = 110; //my bag's volume
             if (baggageWeight > maxWeight && baggageVolume > maxVolume) { 
                 excessBaggageFee = 50.0; // If both weight and volume exceed the limits
             } else if (baggageWeight > maxWeight) {
@@ -309,11 +273,11 @@ public class AirportSimulation {
                 if(!passengerQueue.isEmpty()) {
                     try {
                     	
-                        currentPassenger = passengerQueue.take();
-                        getOnFlight(currentPassenger);           
+                        currentPassenger = passengerQueue.poll();
                         processPassenger(currentPassenger);
-                        
                         Thread.sleep(processingTime); // Simulate processing time
+                        getOnFlight(currentPassenger);
+                        Thread.sleep(200); // Simulate processing time
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -331,17 +295,20 @@ public class AirportSimulation {
                 }
             }
         }
+
         private void getOnFlight(Passenger passenger) {
+            LOGGER.log("Passenger Ready to board flight, Last Name: " + passenger.getLastName());
         	String ref = passenger.getBookingRef();
         	Booking booking = bookings.get(ref);
         	Flight flight = flights.get(booking.getFlightCode());
         	booking.setCheckedIn(true);
         	flight.updateFlight(passenger.getBaggageWeight(), passenger.getBaggageVolume());
         }
+
         // Method to process passenger
         private void processPassenger(Passenger passenger) {
             if(passenger!=null)
-            {LOGGER.info("Passenger checking in, Last Name: " + passenger.getLastName());}
+            {LOGGER.log("Passenger checking in, Last Name: " + passenger.getLastName());}
         }
 
         // Method to get the current passenger being processed

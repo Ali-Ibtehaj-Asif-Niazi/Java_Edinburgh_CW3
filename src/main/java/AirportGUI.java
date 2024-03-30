@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
-import java.util.concurrent.BlockingQueue;
+import java.util.Queue;
 import java.awt.Color;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -19,6 +19,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
+import javax.swing.Timer;
+import javax.swing.JOptionPane;
 
 public class AirportGUI implements ActionListener {
 	private JFrame frame;
@@ -45,6 +47,10 @@ public class AirportGUI implements ActionListener {
 	private double feesCollected;
 	private Map<Flight, FlightPanel> flightPanelsMap;
 	private Map<AirportSimulation.CheckInDesk, DeskPanel> deskPanelsMap;
+	private Timer countdownTimer;
+    private int countdownSeconds;
+	private JLabel countdownLabel;
+
     public AirportGUI(){
     	processingTime = 5000;
     	desksToOpen = 0;
@@ -75,6 +81,7 @@ public class AirportGUI implements ActionListener {
     	deskCloseButton = new JButton("Close a Desk");
     	desksDisplay = new JLabel();
     	desksNumLabel = new JLabel();
+		countdownLabel = new JLabel();
     	decreaseProcessingTimeButton.addActionListener(this);
     	increaseProcessingTimeButton.addActionListener(this);
     	deskOpenButton.addActionListener(this);
@@ -105,6 +112,8 @@ public class AirportGUI implements ActionListener {
         				.addComponent(controlPanel))
         		.addGroup(mainLayout.createParallelGroup()
         				.addComponent(infoReadoutPanel))
+				.addGroup(mainLayout.createParallelGroup()
+        				.addComponent(countdownLabel))
         );
         mainLayout.setVerticalGroup(mainLayout.createSequentialGroup()
         		.addGroup(mainLayout.createSequentialGroup()
@@ -119,6 +128,8 @@ public class AirportGUI implements ActionListener {
         				.addComponent(controlPanel))
         		.addGroup(mainLayout.createSequentialGroup()
         				.addComponent(infoReadoutPanel))
+				.addGroup(mainLayout.createParallelGroup()
+        				.addComponent(countdownLabel))
         );
         controlPanel.add(processingTimeLabel);
         controlPanel.add(decreaseProcessingTimeButton);
@@ -130,6 +141,7 @@ public class AirportGUI implements ActionListener {
         infoReadoutPanel.add(feeLabel);
         passengerQueuePanel.add(passengerQueueAmountLabel);
         passengerQueuePanel.add(passengerQueueScrollPane);
+		mainPanel.add(countdownLabel);
         mainPanel.add(desksNumLabel);
         mainPanel.add(passengerQueuePanel);
         mainPanel.add(desksPanel);
@@ -137,7 +149,25 @@ public class AirportGUI implements ActionListener {
         mainPanel.add(controlPanel);
         mainPanel.add(infoReadoutPanel);
         frame.add(mainPanel);
+		
+
+
+		countdownSeconds = 120; // 2 minutes
+        countdownTimer = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                countdownSeconds--;
+                countdownLabel.setText("All the Check In Desks will close in: " + countdownSeconds + " seconds");
+                if (countdownSeconds <= 0) {
+                    countdownTimer.stop();
+                    // Optionally, perform any action when the countdown reaches zero
+                    JOptionPane.showMessageDialog(frame, "All Check In Desk are now closed. Thank You!");
+                }
+            }
+        });
+        countdownTimer.start();
     }
+
     class FlightPanel extends JPanel{
     	JLabel flightLabel;
     	FlightPanel(){
@@ -183,11 +213,15 @@ public class AirportGUI implements ActionListener {
     				" has a bag weighing " + 
     				Math.round(desk.getCurrentPassenger().getBaggageVolume()*100)/100.0 +
     				"kg" +
-    				"<br>A baggage fee of �" +
+    				"<br>A baggage fee of £" +
     				desk.getCurrentPassenger().getExcessBaggageFee() + 
     				" is due</html>";
     			}
     		}
+			if (countdownSeconds < 1){
+				displayText ="<html>All Check-in desks are now closed. Happy Flight!</html>";
+				desksNumLabel.setText("No desks currently open");
+				}
     		deskLabel.setText(displayText);
     	}
     }
@@ -195,7 +229,7 @@ public class AirportGUI implements ActionListener {
 		frame.setVisible(b);
 		
 	}
-	private Vector<String> QueueToString(BlockingQueue<Passenger> queue) {
+	private Vector<String> QueueToString(Queue<Passenger> queue) {
 		Vector<String> out = new Vector<String>();
 		for (Passenger passenger : queue) {
 			 out.add(
@@ -213,7 +247,7 @@ public class AirportGUI implements ActionListener {
 		}
 		return out;
 	}
-	public void updateQueue(BlockingQueue<Passenger> passengerQueue) {
+	public void updateQueue(Queue<Passenger> passengerQueue) {
 		Vector<String> passengers = QueueToString(passengerQueue);
 		scrollPaneList.setListData(passengers);
 		passengerQueueAmountLabel.setText("There are currently " + passengerQueue.size()+" waiting");
@@ -222,6 +256,7 @@ public class AirportGUI implements ActionListener {
     	deskPanelsMap = new HashMap<AirportSimulation.CheckInDesk, DeskPanel>();
     	desksPanel.removeAll();
     	desksNumLabel.setText(Integer.toString(desks.size()) + " desks currently open");
+		if (countdownSeconds < 1){desksNumLabel.setText("No desks currently open");}
     	for (AirportSimulation.CheckInDesk desk : desks) {
 			DeskPanel newPanel = new DeskPanel();
 			deskPanelsMap.put(desk,newPanel);
