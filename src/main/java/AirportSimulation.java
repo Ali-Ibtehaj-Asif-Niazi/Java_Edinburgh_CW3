@@ -33,6 +33,7 @@ public class AirportSimulation {
     private volatile boolean forOnce = true;
 
     Queue<Passenger> passengerQueue;
+    Queue<Passenger> businessQueue;
     List<Thread> checkInThreads;
     List<CheckInDesk> desks; // Maintain references to CheckInDesk instances
     private int processingTime;
@@ -42,6 +43,7 @@ public class AirportSimulation {
         flights = new HashMap<>();
         bookings = new HashMap<>();
         passengerQueue = new LinkedList<>();
+        businessQueue = new LinkedList<>();
         checkInThreads = new ArrayList<>();
         desks = new ArrayList<>();
         this.airportGUI = airportGUI;
@@ -62,7 +64,8 @@ public class AirportSimulation {
                     }
                     // Creating new Booking object and storing it in HashMap
                     boolean checkedIn = fileLine[3].equals("true");
-                    Booking newBooking = new Booking(fileLine[0], fileLine[1], fileLine[2], checkedIn);
+                    boolean cabinClass = fileLine[4].equals("false");
+                    Booking newBooking = new Booking(fileLine[0], fileLine[1], fileLine[2], checkedIn, cabinClass);
                     bookings.put(fileLine[0], newBooking);
                 } catch (IncorrectRefNumException e) {
                     // Handling incorrect reference number exception
@@ -136,15 +139,29 @@ public class AirportSimulation {
                         for (Booking booking : bookings.values()) {
                             Passenger passenger = createPassengerFromBooking(booking);
                             if (passenger != null) {
-                                try {
-                                    LOGGER.log("Passenger joined the queue, Last Name: " + passenger.getLastName());
-                                    passengerQueue.offer(passenger);
-                                    if (airportGUI != null) {
-                                        updateGUI();
+                                System.out.println(passenger.getCabinClass());
+                                if(!passenger.getCabinClass()){
+                                    try {
+                                        LOGGER.log("Passenger joined the Economy queue, Last Name: " + passenger.getLastName());
+                                        passengerQueue.offer(passenger);
+                                        if (airportGUI != null) {
+                                            updateGUI();
+                                        }
+                                        Thread.sleep(processingTime / 3); // Wait for prcessingTime / 3  milliseconds before adding the next passenger (/3 to build up a queue for demonstration)
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
                                     }
-                                    Thread.sleep(processingTime / 3); // Wait for prcessingTime / 3  milliseconds before adding the next passenger (/3 to build up a queue for demonstration)
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
+                                } else {
+                                    try {
+                                        LOGGER.log("Passenger joined the Business queue, Last Name: " + passenger.getLastName());
+                                        businessQueue.offer(passenger);
+                                        if (airportGUI != null) {
+                                            updateGUI();
+                                        }
+                                        Thread.sleep(processingTime / 3); // Wait for prcessingTime / 3  milliseconds before adding the next passenger (/3 to build up a queue for demonstration)
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }
                                 }
                             }
                         }
@@ -219,7 +236,8 @@ public class AirportSimulation {
     private void updateGUI() {
    	    airportGUI.updateDesks(desks);
 	    airportGUI.updateFlights(flights);
-		airportGUI.updateQueue(passengerQueue);  
+		airportGUI.updateQueue(passengerQueue); 
+        airportGUI.updateBusinessQueue(businessQueue);   
 		openDesks(airportGUI.checkDesksToOpen());
 		processingTime = airportGUI.getProcessingTime();
     }
@@ -246,7 +264,7 @@ public class AirportSimulation {
                 excessBaggageFee = 30.0; // If only volume exceeds the limit
             }
             // Create Passenger object with generated data
-            return new Passenger(booking.getPassengerName(), booking.getBookingRefCode(), baggageWeight, baggageHeight, baggageWidth, baggageLength, baggageVolume, excessBaggageFee);
+            return new Passenger(booking.getPassengerName(), booking.getBookingRefCode(), baggageWeight, baggageHeight, baggageWidth, baggageLength, baggageVolume, excessBaggageFee, booking.getCabinClass());
         }
         return null; // Passenger is already checked in
     }
@@ -270,9 +288,18 @@ public class AirportSimulation {
         @Override
         public void run() {
             while (processing) {
-                if(!passengerQueue.isEmpty()) {
+                if(!businessQueue.isEmpty()) {
                     try {
-                    	
+                        currentPassenger = businessQueue.poll();
+                        processPassenger(currentPassenger);
+                        Thread.sleep(processingTime); // Simulate processing time
+                        getOnFlight(currentPassenger);
+                        Thread.sleep(200); // Simulate processing time
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                } else if (!passengerQueue.isEmpty()){
+                    try {
                         currentPassenger = passengerQueue.poll();
                         processPassenger(currentPassenger);
                         Thread.sleep(processingTime); // Simulate processing time
