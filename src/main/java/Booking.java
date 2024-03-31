@@ -4,13 +4,15 @@ public class Booking {
     String passengerName;
     String flightCode;
     boolean checkedIn;
+    boolean cabinClass; //true = economy & false = business
 
     // Constructor to initialize Booking object with provided details
-    public Booking(String bookingRefCode, String passengerName, String flightCode, boolean checkedIn) {
+    public Booking(String bookingRefCode, String passengerName, String flightCode, boolean checkedIn, boolean cabinClass) {
         this.bookingRefCode = bookingRefCode;
         this.passengerName = passengerName;
         this.flightCode = flightCode;
         this.checkedIn = checkedIn;
+        this.cabinClass = cabinClass;
     }
 
     // Getter method to retrieve booking reference code
@@ -37,4 +39,10 @@ public class Booking {
     public void setCheckedIn(boolean checkedIn) {
         this.checkedIn = checkedIn;
     }
+
+    // Getter method to check cabin class
+    public boolean getCabinClass() {
+        return cabinClass;
+    }
+
 }

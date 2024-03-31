@@ -10,9 +10,10 @@ public class Passenger {
     private double baggageHeight;
 
     private double excessBaggageFee;
+    boolean cabinClass; //true = economy & false = business
 
     // Constructor to initialize Passenger object with provided details
-    public Passenger(String lastName, String bookingRef, double baggageWeight, double baggageHeight, double baggageWidth, double baggageLength, double baggageVolume, double excessBaggageFee) {
+    public Passenger(String lastName, String bookingRef, double baggageWeight, double baggageHeight, double baggageWidth, double baggageLength, double baggageVolume, double excessBaggageFee, boolean cabinClass) {
         this.lastName = lastName;
         this.bookingRef = bookingRef;
         this.baggageWeight = baggageWeight;
@@ -21,6 +22,7 @@ public class Passenger {
         this.baggageWidth = baggageWidth;
         this.baggageHeight = baggageHeight;
         this.excessBaggageFee = excessBaggageFee;
+        this.cabinClass = cabinClass;
     }
 
     // Getter method to retrieve last name
@@ -85,5 +87,10 @@ public class Passenger {
     // Setter method to update excess baggage fee
     public void setExcessBaggageFee(double fee) {
         this.excessBaggageFee = fee;
+    }
+
+    // Getter method to check cabin class
+    public boolean getCabinClass() {
+        return cabinClass;
     }
 }

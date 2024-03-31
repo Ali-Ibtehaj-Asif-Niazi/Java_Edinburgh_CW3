@@ -35,7 +35,13 @@ public class AirportGUI implements ActionListener {
     private JPanel passengerQueuePanel;
     private JScrollPane passengerQueueScrollPane;
     private JLabel passengerQueueAmountLabel; 
+	
+    private JPanel businessQueuePanel;
+    private JScrollPane businessQueueScrollPane;
+    private JLabel businessQueueAmountLabel; 
+
     private JList<String> scrollPaneList;
+	private JList<String> scrollPaneList2;
     private JButton deskOpenButton;
     private JButton deskCloseButton;
     private JLabel desksNumLabel;
@@ -70,6 +76,10 @@ public class AirportGUI implements ActionListener {
     	deskPanelsMap = new HashMap<AirportSimulation.CheckInDesk, DeskPanel>();
     	passengerQueuePanel = new JPanel();
     	passengerQueueAmountLabel = new JLabel();
+
+    	businessQueuePanel = new JPanel();
+    	businessQueueAmountLabel = new JLabel();
+
     	controlPanel = new JPanel();
     	infoReadoutPanel = new JPanel();
     	feeLabel = new JLabel();
@@ -91,8 +101,12 @@ public class AirportGUI implements ActionListener {
     	scrollPaneList = new JList<String>();
     	passengerQueueScrollPane = new JScrollPane();
     	passengerQueueScrollPane.setPreferredSize(new Dimension(450,110));
-    	
     	passengerQueueScrollPane.setViewportView(scrollPaneList);
+
+		scrollPaneList2 = new JList<String>();
+		businessQueueScrollPane = new JScrollPane();
+    	businessQueueScrollPane.setPreferredSize(new Dimension(450,110));
+    	businessQueueScrollPane.setViewportView(scrollPaneList2);
     	
         mainPanel.setOpaque(false);
         GroupLayout mainLayout = new GroupLayout(mainPanel);
@@ -101,7 +115,10 @@ public class AirportGUI implements ActionListener {
         mainLayout.setAutoCreateGaps(true);
         mainLayout.setHorizontalGroup(mainLayout.createParallelGroup(Alignment.CENTER)
         		.addGroup(mainLayout.createParallelGroup()
-        				.addComponent(passengerQueuePanel))
+        				.addComponent(passengerQueuePanel)
+						.addComponent(businessQueuePanel))
+				// .addGroup(mainLayout.createParallelGroup()
+        		// 		.addComponent(businessQueuePanel))
         		.addGroup(mainLayout.createParallelGroup()
         				.addComponent(desksNumLabel))
         		.addGroup(mainLayout.createParallelGroup()
@@ -117,7 +134,10 @@ public class AirportGUI implements ActionListener {
         );
         mainLayout.setVerticalGroup(mainLayout.createSequentialGroup()
         		.addGroup(mainLayout.createSequentialGroup()
-        				.addComponent(passengerQueuePanel))
+        				.addComponent(passengerQueuePanel)
+						.addComponent(businessQueuePanel))
+				// .addGroup(mainLayout.createSequentialGroup()
+        		// 		.addComponent(businessQueuePanel))
         		.addGroup(mainLayout.createSequentialGroup()
         				.addComponent(desksNumLabel))
         		.addGroup(mainLayout.createSequentialGroup()
@@ -141,9 +161,12 @@ public class AirportGUI implements ActionListener {
         infoReadoutPanel.add(feeLabel);
         passengerQueuePanel.add(passengerQueueAmountLabel);
         passengerQueuePanel.add(passengerQueueScrollPane);
+		businessQueuePanel.add(businessQueueAmountLabel);
+        businessQueuePanel.add(businessQueueScrollPane);
 		mainPanel.add(countdownLabel);
         mainPanel.add(desksNumLabel);
         mainPanel.add(passengerQueuePanel);
+		mainPanel.add(businessQueuePanel);
         mainPanel.add(desksPanel);
         mainPanel.add(flightsPanel);
         mainPanel.add(controlPanel);
@@ -250,7 +273,12 @@ public class AirportGUI implements ActionListener {
 	public void updateQueue(Queue<Passenger> passengerQueue) {
 		Vector<String> passengers = QueueToString(passengerQueue);
 		scrollPaneList.setListData(passengers);
-		passengerQueueAmountLabel.setText("There are currently " + passengerQueue.size()+" waiting");
+		passengerQueueAmountLabel.setText("Economy Cabin Class Queue: There are currently " + passengerQueue.size()+" waiting");
+	}
+	public void updateBusinessQueue(Queue<Passenger> businessQueue) {
+		Vector<String> passengers = QueueToString(businessQueue);
+		scrollPaneList2.setListData(passengers);
+		businessQueueAmountLabel.setText("Business Cabin Class Queue: There are currently " + businessQueue.size()+" waiting\n (High Priority)");
 	}
 	public void addDesks(List<AirportSimulation.CheckInDesk> desks) {
     	deskPanelsMap = new HashMap<AirportSimulation.CheckInDesk, DeskPanel>();
