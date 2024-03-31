@@ -139,7 +139,6 @@ public class AirportSimulation {
                         for (Booking booking : bookings.values()) {
                             Passenger passenger = createPassengerFromBooking(booking);
                             if (passenger != null) {
-                                System.out.println(passenger.getCabinClass());
                                 if(!passenger.getCabinClass()){
                                     try {
                                         LOGGER.log("Passenger joined the Economy queue, Last Name: " + passenger.getLastName());
@@ -183,12 +182,12 @@ public class AirportSimulation {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                LOGGER.log("All Check-in desks are now closed. Happy Flight!");
                 stopQueueProcessing();
                 for (CheckInDesk desk_running : desks) {
                     desk_running.stopProcessing();
                     updateGUI();
                 }
+                LOGGER.log("All check-in desks are now closed. We regret to inform you that we will not be able to accommodate any further passengers from the queues. Thank you for your understanding. Have a pleasant flight!");
                 timer.cancel();
             }
         }, SIMULATION_DURATION_MS);

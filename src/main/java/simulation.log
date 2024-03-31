@@ -1,78 +1,180 @@
-Mar 31, 2024 7:54:40 Simulation Started
+Mar 31, 2024 8:48:29 Simulation Started
 
-Mar 31, 2024 7:54:40 Passenger joined the Economy queue, Last Name: Adam
+Mar 31, 2024 8:48:29 Passenger joined the Economy queue, Last Name: Adam
 
-Mar 31, 2024 7:54:40 Passenger checking in, Last Name: Adam
+Mar 31, 2024 8:48:30 Passenger checking in, Last Name: Adam
 
-Mar 31, 2024 7:54:41 Passenger joined the Economy queue, Last Name: Loki
+Mar 31, 2024 8:48:31 Passenger joined the Economy queue, Last Name: Loki
 
-Mar 31, 2024 7:54:43 Passenger joined the Economy queue, Last Name: Khan
+Mar 31, 2024 8:48:33 Passenger joined the Economy queue, Last Name: Khan
 
-Mar 31, 2024 7:54:45 Passenger Ready to board flight, Last Name: Adam
+Mar 31, 2024 8:48:34 Passenger checking in, Last Name: Loki
 
-Mar 31, 2024 7:54:45 Passenger joined the Economy queue, Last Name: Smith
+Mar 31, 2024 8:48:35 Passenger joined the Economy queue, Last Name: Smith
 
-Mar 31, 2024 7:54:45 Passenger checking in, Last Name: Loki
+Mar 31, 2024 8:48:35 Passenger Ready to board flight, Last Name: Adam
 
-Mar 31, 2024 7:54:45 Passenger checking in, Last Name: Khan
+Mar 31, 2024 8:48:35 Passenger checking in, Last Name: Khan
 
-Mar 31, 2024 7:54:46 Passenger joined the Economy queue, Last Name: Valkyrie
+Mar 31, 2024 8:48:37 Passenger joined the Economy queue, Last Name: Valkyrie
 
-Mar 31, 2024 7:54:48 Passenger joined the Economy queue, Last Name: Blade
+Mar 31, 2024 8:48:39 Passenger joined the Economy queue, Last Name: Blade
 
-Mar 31, 2024 7:54:50 Passenger joined the Economy queue, Last Name: Watt
+Mar 31, 2024 8:48:41 Passenger Ready to board flight, Last Name: Loki
 
-Mar 31, 2024 7:54:50 Passenger Ready to board flight, Last Name: Loki
+Mar 31, 2024 8:48:41 Passenger checking in, Last Name: Smith
 
-Mar 31, 2024 7:54:50 Passenger Ready to board flight, Last Name: Khan
+Mar 31, 2024 8:48:41 Passenger Ready to board flight, Last Name: Khan
 
-Mar 31, 2024 7:54:50 Passenger checking in, Last Name: Smith
+Mar 31, 2024 8:48:42 Passenger checking in, Last Name: Valkyrie
 
-Mar 31, 2024 7:54:50 Passenger checking in, Last Name: Valkyrie
+Mar 31, 2024 8:48:42 Passenger joined the Economy queue, Last Name: Watt
 
-Mar 31, 2024 7:54:51 Passenger joined the Economy queue, Last Name: Hera
+Mar 31, 2024 8:48:46 Passenger joined the Economy queue, Last Name: Hera
 
-Mar 31, 2024 7:54:53 Passenger joined the Economy queue, Last Name: Zeus
+Mar 31, 2024 8:48:49 Passenger joined the Economy queue, Last Name: Zeus
 
-Mar 31, 2024 7:54:55 Passenger joined the Business queue, Last Name: Eros
+Mar 31, 2024 8:48:50 Passenger Ready to board flight, Last Name: Smith
 
-Mar 31, 2024 7:54:55 Passenger Ready to board flight, Last Name: Smith
+Mar 31, 2024 8:48:51 Passenger checking in, Last Name: Blade
 
-Mar 31, 2024 7:54:55 Passenger Ready to board flight, Last Name: Valkyrie
+Mar 31, 2024 8:48:52 Passenger Ready to board flight, Last Name: Valkyrie
 
-Mar 31, 2024 7:54:55 Passenger checking in, Last Name: Eros
+Mar 31, 2024 8:48:52 Passenger checking in, Last Name: Watt
 
-Mar 31, 2024 7:54:55 Passenger checking in, Last Name: Blade
+Mar 31, 2024 8:48:52 Passenger joined the Business queue, Last Name: Eros
 
-Mar 31, 2024 7:54:56 Passenger joined the Economy queue, Last Name: Athena
+Mar 31, 2024 8:48:56 Passenger joined the Economy queue, Last Name: Athena
 
-Mar 31, 2024 7:54:58 Passenger joined the Economy queue, Last Name: Atlas
+Mar 31, 2024 8:48:59 Passenger joined the Economy queue, Last Name: Atlas
 
-Mar 31, 2024 7:55:00 Passenger joined the Economy queue, Last Name: Medusa
+Mar 31, 2024 8:49:01 Passenger Ready to board flight, Last Name: Blade
 
-Mar 31, 2024 7:55:00 Passenger Ready to board flight, Last Name: Eros
+Mar 31, 2024 8:49:01 Passenger checking in, Last Name: Eros
 
-Mar 31, 2024 7:55:00 Passenger Ready to board flight, Last Name: Blade
+Mar 31, 2024 8:49:02 Passenger Ready to board flight, Last Name: Watt
 
-Mar 31, 2024 7:55:01 Passenger checking in, Last Name: Watt
+Mar 31, 2024 8:49:02 Passenger checking in, Last Name: Hera
 
-Mar 31, 2024 7:55:01 Passenger checking in, Last Name: Hera
+Mar 31, 2024 8:49:02 Passenger joined the Economy queue, Last Name: Medusa
 
-Mar 31, 2024 7:55:01 Passenger joined the Economy queue, Last Name: Thanatos
+Mar 31, 2024 8:49:05 Passenger joined the Economy queue, Last Name: Thanatos
 
-Mar 31, 2024 7:55:03 Passenger joined the Economy queue, Last Name: Artemis
+Mar 31, 2024 8:49:09 Passenger joined the Economy queue, Last Name: Artemis
 
-Mar 31, 2024 7:55:05 Passenger joined the Business queue, Last Name: Chronos
+Mar 31, 2024 8:49:11 Passenger Ready to board flight, Last Name: Eros
 
-Mar 31, 2024 7:55:06 Passenger Ready to board flight, Last Name: Watt
+Mar 31, 2024 8:49:11 Passenger checking in, Last Name: Zeus
 
-Mar 31, 2024 7:55:06 Passenger Ready to board flight, Last Name: Hera
+Mar 31, 2024 8:49:12 Passenger Ready to board flight, Last Name: Hera
 
-Mar 31, 2024 7:55:06 Passenger checking in, Last Name: Chronos
+Mar 31, 2024 8:49:12 Passenger joined the Business queue, Last Name: Chronos
 
-Mar 31, 2024 7:55:06 Passenger checking in, Last Name: Zeus
+Mar 31, 2024 8:49:12 Passenger checking in, Last Name: Chronos
 
-Mar 31, 2024 7:55:07 Passenger joined the Business queue, Last Name: Pandora
+Mar 31, 2024 8:49:15 Passenger joined the Business queue, Last Name: Pandora
 
-Mar 31, 2024 7:55:08 Passenger joined the Business queue, Last Name: Demeter
+Mar 31, 2024 8:49:19 Passenger joined the Business queue, Last Name: Demeter
+
+Mar 31, 2024 8:49:21 Passenger Ready to board flight, Last Name: Zeus
+
+Mar 31, 2024 8:49:21 Passenger checking in, Last Name: Pandora
+
+Mar 31, 2024 8:49:22 Passenger joined the Economy queue, Last Name: Achilles
+
+Mar 31, 2024 8:49:22 Passenger Ready to board flight, Last Name: Chronos
+
+Mar 31, 2024 8:49:22 Passenger checking in, Last Name: Demeter
+
+Mar 31, 2024 8:49:25 Passenger joined the Economy queue, Last Name: Poseidon
+
+Mar 31, 2024 8:49:29 Passenger joined the Economy queue, Last Name: Thor
+
+Mar 31, 2024 8:49:31 Passenger Ready to board flight, Last Name: Pandora
+
+Mar 31, 2024 8:49:31 Passenger checking in, Last Name: Athena
+
+Mar 31, 2024 8:49:32 Passenger joined the Economy queue, Last Name: Jacob
+
+Mar 31, 2024 8:49:32 Passenger Ready to board flight, Last Name: Demeter
+
+Mar 31, 2024 8:49:32 Passenger checking in, Last Name: Atlas
+
+Mar 31, 2024 8:49:35 Passenger joined the Economy queue, Last Name: Helios
+
+Mar 31, 2024 8:49:39 Passenger joined the Economy queue, Last Name: Hermes
+
+Mar 31, 2024 8:49:41 Passenger Ready to board flight, Last Name: Athena
+
+Mar 31, 2024 8:49:41 Passenger checking in, Last Name: Medusa
+
+Mar 31, 2024 8:49:42 Passenger joined the Economy queue, Last Name: Axe
+
+Mar 31, 2024 8:49:42 Passenger Ready to board flight, Last Name: Atlas
+
+Mar 31, 2024 8:49:42 Passenger checking in, Last Name: Thanatos
+
+Mar 31, 2024 8:49:45 Passenger joined the Economy queue, Last Name: Odin
+
+Mar 31, 2024 8:49:48 Passenger joined the Economy queue, Last Name: Perseus
+
+Mar 31, 2024 8:49:51 Passenger Ready to board flight, Last Name: Medusa
+
+Mar 31, 2024 8:49:51 Passenger checking in, Last Name: Artemis
+
+Mar 31, 2024 8:49:52 Passenger joined the Business queue, Last Name: Cerberus
+
+Mar 31, 2024 8:49:52 Passenger Ready to board flight, Last Name: Thanatos
+
+Mar 31, 2024 8:49:53 Passenger checking in, Last Name: Cerberus
+
+Mar 31, 2024 8:49:55 Passenger joined the Economy queue, Last Name: Hades
+
+Mar 31, 2024 8:49:58 Passenger joined the Business queue, Last Name: Aphrodite
+
+Mar 31, 2024 8:50:01 Passenger Ready to board flight, Last Name: Artemis
+
+Mar 31, 2024 8:50:01 Passenger checking in, Last Name: Aphrodite
+
+Mar 31, 2024 8:50:02 Passenger joined the Economy queue, Last Name: Abby
+
+Mar 31, 2024 8:50:02 Passenger Ready to board flight, Last Name: Cerberus
+
+Mar 31, 2024 8:50:03 Passenger checking in, Last Name: Achilles
+
+Mar 31, 2024 8:50:05 Passenger joined the Economy queue, Last Name: Phoenix
+
+Mar 31, 2024 8:50:08 Passenger joined the Economy queue, Last Name: Diana
+
+Mar 31, 2024 8:50:11 Passenger Ready to board flight, Last Name: Aphrodite
+
+Mar 31, 2024 8:50:12 Passenger checking in, Last Name: Poseidon
+
+Mar 31, 2024 8:50:12 Passenger joined the Economy queue, Last Name: Heimdall
+
+Mar 31, 2024 8:50:13 Passenger Ready to board flight, Last Name: Achilles
+
+Mar 31, 2024 8:50:13 Passenger checking in, Last Name: Thor
+
+Mar 31, 2024 8:50:15 Passenger joined the Economy queue, Last Name: Hercules
+
+Mar 31, 2024 8:50:18 Passenger joined the Economy queue, Last Name: Kratos
+
+Mar 31, 2024 8:50:22 Passenger Ready to board flight, Last Name: Poseidon
+
+Mar 31, 2024 8:50:22 Passenger joined the Economy queue, Last Name: Philip
+
+Mar 31, 2024 8:50:22 Passenger checking in, Last Name: Jacob
+
+Mar 31, 2024 8:50:23 Passenger Ready to board flight, Last Name: Thor
+
+Mar 31, 2024 8:50:23 Passenger checking in, Last Name: Helios
+
+Mar 31, 2024 8:50:25 Passenger joined the Economy queue, Last Name: Orion
+
+Mar 31, 2024 8:50:30 All Check-in desks are now closed. Happy Flight!
+
+Mar 31, 2024 8:50:32 Passenger Ready to board flight, Last Name: Jacob
+
+Mar 31, 2024 8:50:33 Passenger Ready to board flight, Last Name: Helios
 
